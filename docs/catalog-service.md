@@ -1,41 +1,77 @@
 # Catalog Service
 
-> Microservice quản lý danh mục sản phẩm (Product Catalog) với Spring Boot 3.5.9, Java 21
-
-## 📦 Tech Stack
-
-| Công nghệ          | Mô tả                             |
-| ------------------ | --------------------------------- |
-| **Spring Boot**    | REST API + JPA/Hibernate          |
-| **PostgreSQL**     | Database lưu trữ sản phẩm         |
-| **Flyway**         | Quản lý database migration        |
-| **Swagger**        | API documentation tự động         |
-| **Actuator**       | Health check + Prometheus metrics |
-| **Testcontainers** | Integration testing với Docker    |
-| **Spotless**       | Auto-format code (Palantir Java)  |
+> Microservice quản lý danh mục sản phẩm với Spring Boot 3.5.9 + PostgreSQL
 
 ---
 
-## 🚀 Quick Start
+## Yêu Cầu Hệ Thống
+
+| Tool   | Version                        |
+| ------ | ------------------------------ |
+| JDK    | 21+                            |
+| Docker | 20.10+                         |
+| Maven  | 3.9+ (tùy chọn, đã có wrapper) |
+
+---
+
+## Bắt Đầu Nhanh
+
+### Bước 1: Khởi động Database
 
 ```bash
-# 1. Khởi động PostgreSQL
 docker compose -f deployment/docker-compose/infra.yml up -d
+```
 
-# 2. Chạy ứng dụng
+> Kiểm tra database đã sẵn sàng:
+>
+> ```bash
+> docker ps | findstr catalog-db
+> ```
+
+### Bước 2: Chạy ứng dụng
+
+```bash
 cd catalog-service
 ./mvnw spring-boot:run
 ```
 
-📍 **URL:** `http://localhost:8081`
+> **Windows users:** Dùng `mvnw.cmd spring-boot:run`
+
+### Bước 3: Kiểm tra
+
+Mở trình duyệt và truy cập:
+
+| URL                                   | Mô tả              |
+| ------------------------------------- | ------------------ |
+| http://localhost:8081/swagger-ui.html | API Documentation  |
+| http://localhost:8081/api/products    | Danh sách sản phẩm |
+| http://localhost:8081/actuator/health | Health check       |
 
 ---
 
-## 📚 API Reference
+## Tech Stack
 
-### `GET /api/products?page={n}`
+| Công nghệ         | Mục đích                          |
+| ----------------- | --------------------------------- |
+| Spring Boot 3.5.9 | REST API + JPA/Hibernate          |
+| PostgreSQL 18     | Database                          |
+| Flyway            | Database migration tự động        |
+| Swagger (OpenAPI) | API documentation                 |
+| Actuator          | Health check + Prometheus metrics |
+| Testcontainers    | Integration testing               |
+| Spotless          | Code formatting (Palantir style)  |
 
-Lấy danh sách sản phẩm có phân trang (mặc định: 10 items/page)
+---
+
+## API Endpoints
+
+### Lấy danh sách sản phẩm
+
+```http
+GET /api/products?page=1
+```
+
+**Response:**
 
 ```json
 {
@@ -48,24 +84,30 @@ Lấy danh sách sản phẩm có phân trang (mặc định: 10 items/page)
 }
 ```
 
-### `GET /api/products/{code}`
+### Lấy chi tiết sản phẩm
 
-Lấy sản phẩm theo mã code → `200 OK` hoặc `404 Not Found`
+```http
+GET /api/products/{code}
+```
 
----
-
-## 🔗 Utility Endpoints
-
-| Endpoint               | Mô tả              |
-| ---------------------- | ------------------ |
-| `/swagger-ui.html`     | API Documentation  |
-| `/actuator/health`     | Health check       |
-| `/actuator/info`       | Build & Git info   |
-| `/actuator/prometheus` | Prometheus metrics |
+**Response:** `200 OK` với product JSON hoặc `404 Not Found`
 
 ---
 
-## 🗄️ Database Schema
+## Endpoints Hệ Thống
+
+| Endpoint               | Mô tả                  |
+| ---------------------- | ---------------------- |
+| `/swagger-ui.html`     | Swagger UI             |
+| `/actuator/health`     | Health check           |
+| `/actuator/info`       | Build & Git info       |
+| `/actuator/prometheus` | Metrics cho Prometheus |
+
+---
+
+## Database
+
+### Schema
 
 ```sql
 CREATE TABLE products (
@@ -78,40 +120,51 @@ CREATE TABLE products (
 );
 ```
 
-> 💡 Flyway tự động migrate khi ứng dụng khởi động
+### Cấu hình kết nối
+
+```properties
+# Mặc định (có thể override bằng biến môi trường)
+spring.datasource.url=jdbc:postgresql://localhost:15432/postgres
+spring.datasource.username=postgres
+spring.datasource.password=postgres
+```
+
+| Biến môi trường | Giá trị mặc định                             |
+| --------------- | -------------------------------------------- |
+| `DB_URL`        | `jdbc:postgresql://localhost:15432/postgres` |
+| `DB_USERNAME`   | `postgres`                                   |
+| `DB_PASSWORD`   | `postgres`                                   |
+
+> Flyway tự động chạy migration khi ứng dụng khởi động
 
 ---
 
-## ⚙️ Configuration
+## Cấu Hình
+
+File: `catalog-service/src/main/resources/application.properties`
 
 ```properties
-# application.properties
 server.port=8081
 catalog.page-size=10
-
-# Database (có thể override bằng env vars)
-spring.datasource.url=${DB_URL:jdbc:postgresql://localhost:15432/postgres}
-spring.datasource.username=${DB_USERNAME:postgres}
-spring.datasource.password=${DB_PASSWORD:postgres}
 ```
 
 ---
 
-## 📁 Project Structure
+## Cấu Trúc Dự Án
 
 ```
 catalog-service/
 ├── src/main/java/com/qtuan02/catalog/
-│   ├── ApplicationProperties.java     # @ConfigurationProperties
-│   ├── CatalogServiceApplication.java
+│   ├── ApplicationProperties.java      # Config properties binding
+│   ├── CatalogServiceApplication.java  # Main class
 │   ├── domain/
-│   │   ├── Product.java               # DTO record
-│   │   ├── ProductEntity.java         # JPA Entity
-│   │   ├── ProductMapper.java         # Entity → DTO
-│   │   ├── ProductRepository.java     # Spring Data JPA
-│   │   ├── ProductService.java        # Business logic
+│   │   ├── Product.java                # DTO (record)
+│   │   ├── ProductEntity.java          # JPA Entity
+│   │   ├── ProductMapper.java          # Entity ↔ DTO
+│   │   ├── ProductRepository.java      # Spring Data JPA
+│   │   ├── ProductService.java         # Business logic
 │   │   ├── ProductNotFoundException.java
-│   │   └── PagedResult.java           # Pagination wrapper
+│   │   └── PagedResult.java            # Pagination wrapper
 │   └── web/
 │       ├── controllers/ProductController.java
 │       └── exception/GlobalExceptionHandler.java
@@ -125,32 +178,87 @@ catalog-service/
 
 ---
 
-## 🧪 Commands
+## Các Lệnh Thường Dùng
+
+> Tất cả lệnh chạy từ thư mục `catalog-service/`
+
+### Chạy ứng dụng
 
 ```bash
-# Chạy tests (Testcontainers + REST Assured)
+./mvnw spring-boot:run
+```
+
+### Chạy tests
+
+```bash
 ./mvnw test
+```
 
-# Build & verify
+### Build & verify
+
+```bash
 ./mvnw verify
+```
 
-# Check format
+### Code formatting
+
+```bash
+# Kiểm tra format
 ./mvnw spotless:check
 
-# Auto-fix format
+# Tự động sửa format
 ./mvnw spotless:apply
+```
 
-# Build Docker image
+### Build Docker image
+
+```bash
 ./mvnw spring-boot:build-image -DskipTests
 ```
 
+> Image name: `qtuan02/ecommerce-catalog-service`
+
 ---
 
-## 🐳 CI/CD
+## CI/CD
 
 GitHub Actions tự động chạy khi:
 
-- Push code vào `catalog-service/**` trên branch `main`
-- Tạo Pull Request vào branch `main`
+- ✅ Push code vào `catalog-service/**` trên branch `main`
+- ✅ Tạo Pull Request vào branch `main`
 
-📄 File: `.github/workflows/catalog-service.yml`
+📄 Workflow file: `.github/workflows/catalog-service.yml`
+
+---
+
+## Troubleshooting
+
+### Database không kết nối được
+
+```bash
+# Kiểm tra container đang chạy
+docker ps | findstr catalog-db
+
+# Xem logs
+docker logs catalog-db
+
+# Restart database
+docker compose -f deployment/docker-compose/infra.yml restart catalog-db
+```
+
+### Port 8081 đã bị sử dụng
+
+```bash
+# Windows: Tìm process đang dùng port
+netstat -ano | findstr :8081
+
+# Hoặc đổi port trong application.properties
+server.port=8082
+```
+
+### Spotless check fail
+
+```bash
+# Auto-fix format
+./mvnw spotless:apply
+```
