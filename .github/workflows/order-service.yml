@@ -1,9 +1,9 @@
-name: Catalog Service
+name: Order Service
 
 on:
   push:
     paths:
-      - catalog-service/**
+      - order-service/**
     branches:
       - 'main'
   pull_request:
@@ -14,8 +14,8 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     env:
-      working-directory: ./catalog-service
-      DOCKER_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/ecommerce-catalog-service
+      working-directory: ./order-service
+      DOCKER_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/ecommerce-order-service
     defaults:
       run:
         working-directory: ${{ env.working-directory }}
