@@ -18,8 +18,10 @@
     </properties>
 
     <modules>
+        <module>template-service</module>
         <module>catalog-service</module>
         <module>order-service</module>
+        <module>notification-service</module>
     </modules>
 
     <build>
