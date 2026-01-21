@@ -82,6 +82,14 @@ cd notification-service
 # Windows dùng: mvnw.cmd spring-boot:run
 ```
 
+**4. API Gateway** (Port 8989)
+
+```bash
+cd api-gateway
+./mvnw spring-boot:run
+# Windows dùng: mvnw.cmd spring-boot:run
+```
+
 ### Option: Chạy Full Docker
 
 Nếu muốn chạy toàn bộ hệ thống bằng Docker (không cần cài Java/Maven):
@@ -97,6 +105,7 @@ Sau khi chạy xong, truy cập:
 
 - **Catalog API**: [http://localhost:8081/swagger-ui.html](http://localhost:8081/swagger-ui.html)
 - **Order API**: [http://localhost:8082/swagger-ui.html](http://localhost:8082/swagger-ui.html)
+- **API Gateway (Tổng hợp)**: [http://localhost:8989/swagger-ui.html](http://localhost:8989/swagger-ui.html)
 - **RabbitMQ**: [http://localhost:15672](http://localhost:15672) (guest/guest)
 
 **Xem tài liệu chi tiết:**
@@ -105,6 +114,7 @@ Sau khi chạy xong, truy cập:
 - [Catalog Service](docs/2.catalog-service.md)
 - [Order Service](docs/3.order-service.md)
 - [Notification Service](docs/4.notification-service.md)
+- [API Gateway](docs/5.api-gateway.md)
 - [Docker Guide](docs/docker.md)
 - [CI/CD (GitHub Actions)](docs/github.md)
 - [Hướng dẫn sử dụng Task](docs/task.md)

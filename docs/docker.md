@@ -65,6 +65,7 @@ Chứa các Microservices do chúng ta code:
 - **catalog-service**: Port 8081.
 - **order-service**: Port 8082.
 - **notification-service**: Port 8083.
+- **api-gateway**: Port 8989 (Cổng chính).
 
 Mỗi service được cấu hình kết nối đến database và RabbitMQ tương ứng thông qua biến môi trường.
 
