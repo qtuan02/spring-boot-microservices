@@ -1,9 +1,9 @@
 package com.qtuan02.catalog.web.controllers;
 
-import com.qtuan02.catalog.domain.PagedResult;
-import com.qtuan02.catalog.domain.Product;
-import com.qtuan02.catalog.domain.ProductNotFoundException;
-import com.qtuan02.catalog.domain.ProductService;
+import com.qtuan02.catalog.domain.models.PagedResult;
+import com.qtuan02.catalog.domain.products.Product;
+import com.qtuan02.catalog.domain.products.ProductNotFoundException;
+import com.qtuan02.catalog.domain.products.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +17,13 @@ public class ProductController {
     }
 
     @GetMapping
-    PagedResult<Product> getProducts(@RequestParam(name = "page", defaultValue = "1") int pageNo) {
-        return productService.getProducts(pageNo);
+    PagedResult<Product> getProducts(
+            @RequestParam(name = "page", required = false) Integer pageNo,
+            @RequestParam(name = "size", required = false) Integer pageSize,
+            @RequestParam(name = "sortBy", defaultValue = "name") String sortBy,
+            @RequestParam(name = "asc", defaultValue = "true") boolean asc,
+            @RequestParam(name = "category", required = false) String categoryCode) {
+        return productService.getProducts(pageNo, pageSize, sortBy, asc, categoryCode);
     }
 
     @GetMapping("/{code}")

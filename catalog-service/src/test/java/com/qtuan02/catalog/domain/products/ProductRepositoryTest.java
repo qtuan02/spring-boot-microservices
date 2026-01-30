@@ -1,4 +1,4 @@
-package com.qtuan02.catalog.domain;
+package com.qtuan02.catalog.domain.products;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -7,6 +7,9 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.jdbc.Sql;
 
 @DataJpaTest(
@@ -27,6 +30,18 @@ class ProductRepositoryTest {
     }
 
     @Test
+    void shouldGetProductsWithPagination() {
+        Pageable pageable = PageRequest.of(0, 5);
+        Page<ProductEntity> page = productRepository.findAll(pageable);
+
+        assertThat(page.getContent()).hasSize(5);
+        assertThat(page.getTotalElements()).isEqualTo(15);
+        assertThat(page.getTotalPages()).isEqualTo(3);
+        assertThat(page.isFirst()).isTrue();
+        assertThat(page.hasNext()).isTrue();
+    }
+
+    @Test
     void shouldGetProductByCode() {
         ProductEntity product = productRepository.findByCode("P100").orElseThrow();
         assertThat(product.getCode()).isEqualTo("P100");
@@ -38,5 +53,22 @@ class ProductRepositoryTest {
     @Test
     void shouldReturnEmptyWhenProductCodeNotExists() {
         assertThat(productRepository.findByCode("invalid_product_code")).isEmpty();
+    }
+
+    @Test
+    void shouldGetProductsByCategory() {
+        Page<ProductEntity> page = productRepository.findProductsByCategoryCode("fiction", Pageable.unpaged());
+        assertThat(page.getContent()).hasSize(9);
+    }
+
+    @Test
+    void shouldGetProductsByCategoryWithPagination() {
+        Pageable pageable = PageRequest.of(0, 5);
+        Page<ProductEntity> page = productRepository.findProductsByCategoryCode("fiction", pageable);
+
+        assertThat(page.getContent()).hasSize(5);
+        assertThat(page.getTotalElements()).isEqualTo(9);
+        assertThat(page.getTotalPages()).isEqualTo(2);
+        assertThat(page.hasNext()).isTrue();
     }
 }

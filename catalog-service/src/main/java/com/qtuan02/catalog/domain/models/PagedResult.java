@@ -1,4 +1,4 @@
-package com.qtuan02.catalog.domain;
+package com.qtuan02.catalog.domain.models;
 
 import java.util.List;
 

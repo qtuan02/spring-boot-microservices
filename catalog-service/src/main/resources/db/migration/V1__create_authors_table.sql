@@ -1,0 +1,7 @@
+CREATE SEQUENCE author_id_seq START WITH 1 INCREMENT BY 50;
+
+CREATE TABLE authors (
+    id   BIGINT DEFAULT NEXTVAL('author_id_seq') NOT NULL,
+    name TEXT NOT NULL,
+    PRIMARY KEY (id)
+);

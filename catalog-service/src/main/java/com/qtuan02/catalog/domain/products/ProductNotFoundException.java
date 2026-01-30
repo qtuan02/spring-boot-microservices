@@ -1,4 +1,4 @@
-package com.qtuan02.catalog.domain;
+package com.qtuan02.catalog.domain.products;
 
 public class ProductNotFoundException extends RuntimeException {
     public ProductNotFoundException(String message) {

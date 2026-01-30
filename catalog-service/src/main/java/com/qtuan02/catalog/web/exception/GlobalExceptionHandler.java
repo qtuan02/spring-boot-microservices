@@ -1,6 +1,6 @@
 package com.qtuan02.catalog.web.exception;
 
-import com.qtuan02.catalog.domain.ProductNotFoundException;
+import com.qtuan02.catalog.domain.products.ProductNotFoundException;
 import java.net.URI;
 import java.time.Instant;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         problemDetail.setTitle("Internal Server Error");
         problemDetail.setType(ISE_FOUND_TYPE);
         problemDetail.setProperty("service", SERVICE_NAME);
-        problemDetail.setProperty("error_category", "Generic");
+        problemDetail.setProperty("error", "Generic");
         problemDetail.setProperty("timestamp", Instant.now());
         return problemDetail;
     }
@@ -33,7 +33,7 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         problemDetail.setTitle("Product Not Found");
         problemDetail.setType(NOT_FOUND_TYPE);
         problemDetail.setProperty("service", SERVICE_NAME);
-        problemDetail.setProperty("error_category", "Generic");
+        problemDetail.setProperty("error", "Generic");
         problemDetail.setProperty("timestamp", Instant.now());
         return problemDetail;
     }

@@ -1,0 +1,7 @@
+CREATE SEQUENCE tag_id_seq START WITH 1 INCREMENT BY 50;
+
+CREATE TABLE tags (
+    id   BIGINT DEFAULT NEXTVAL('tag_id_seq') NOT NULL,
+    name TEXT NOT NULL UNIQUE,
+    PRIMARY KEY (id)
+);
