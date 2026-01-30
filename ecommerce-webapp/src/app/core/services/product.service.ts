@@ -14,6 +14,7 @@ export class ProductService extends BaseService {
   getProducts(pageParams: PageParams | null): Observable<ProductListResponse> {
     let params = new HttpParams();
     if (pageParams?.page) params = params.set('page', pageParams.page.toString());
+    if (pageParams?.size) params = params.set('size', pageParams.size.toString());
 
     return this.get<ProductListResponse>({
       path: this.endpoint,

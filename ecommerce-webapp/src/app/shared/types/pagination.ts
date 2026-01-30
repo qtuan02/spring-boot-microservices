@@ -2,6 +2,7 @@ import { PageEvent } from '@angular/material/paginator';
 
 export type PageParams = {
   page?: number;
+  size?: number;
 };
 
 export type PagePagination = {

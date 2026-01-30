@@ -13,7 +13,7 @@ import { Product } from '~/shared/types/products';
   templateUrl: './home.html',
 })
 export class Home {
-  pagination = signal<PageParams>({ page: 1 });
+  pagination = signal<PageParams>({ page: 1, size: 8 });
 
   productResource = injectProductList(this.pagination);
 
@@ -22,6 +22,10 @@ export class Home {
   }
 
   handlePageEvent(e: PageEvent) {
-    this.pagination.set({ page: e.pageIndex + 1 });
+    this.pagination.set({
+      page: e.pageIndex + 1,
+      size: e.pageSize,
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }

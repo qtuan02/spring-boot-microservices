@@ -16,6 +16,7 @@ export function injectProductList(pagination: Signal<PageParams>) {
     hasValue: computed(() => resource.hasValue()),
     isLoading: computed(() => resource.isLoading()),
     data: computed(() => resource.value()?.data ?? []),
+    pageSize: computed(() => pagination().size ?? 8),
     pageIndex: computed(() => (pagination().page ?? 1) - 1),
     totalElements: computed(() => resource.value()?.totalElements ?? 0),
   };

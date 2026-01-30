@@ -7,10 +7,12 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
   templateUrl: './pagination.html',
 })
 export class Pagination {
-  pageSize = input<number>(10);
   length = input.required<number>();
-  hidePageSize = input<boolean>(true);
+  pageSize = input.required<number>();
   pageIndex = input.required<number>();
+
+  hidePageSize = input<boolean>(false);
+  pageSizeOptions = input<number[]>([8, 12, 16, 20]);
 
   pageChange = output<PageEvent>();
 

@@ -1,15 +1,20 @@
 <section class="p-4">
   <div class="max-w-[1200px] mx-auto w-full">
+    <!-- <h1 class="text-2xl font-bold text-gray-900 h-full mb-2">All</h1> -->
+
     @if (productResource.hasValue()) {
-      <div class="grid grid-cols-[repeat(auto-fill,minmax(270px,1fr))] gap-4">
+      <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
         @for (item of productResource.data(); track item.code) {
           <app-product-card [product]="item" (handleAddToCart)="handleAddToCart($event)" />
         }
       </div>
 
       <app-pagination
-        [length]="productResource.totalElements()"
+        class="mt-5 mb-2 justify-end flex"
+        [pageSizeOptions]="[10, 15, 20]"
+        [pageSize]="productResource.pageSize()"
         [pageIndex]="productResource.pageIndex()"
+        [length]="productResource.totalElements()"
         (pageChange)="handlePageEvent($event)"
       />
     }

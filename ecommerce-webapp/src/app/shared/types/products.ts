@@ -1,3 +1,5 @@
+import { Author } from './author';
+import { Category } from './category';
 import { ResponseError, ResponsePageList } from './response';
 
 export type Product = {
@@ -6,6 +8,9 @@ export type Product = {
   description: string;
   imageUrl: string;
   price: number;
+  category: Category;
+  author: Author;
+  tags: string[];
 };
 
 export type ProductListResponse = ResponsePageList<Product>;

@@ -1,10 +1,10 @@
 <mat-paginator
-  class="mx-auto"
   aria-label="Select page"
   [length]="length()"
   [pageSize]="pageSize()"
   [pageIndex]="pageIndex()"
   [hidePageSize]="hidePageSize()"
+  [pageSizeOptions]="pageSizeOptions()"
   (page)="handlePageEvent($event)"
 >
 </mat-paginator>
