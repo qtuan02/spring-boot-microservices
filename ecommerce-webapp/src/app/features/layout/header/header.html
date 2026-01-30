@@ -1,0 +1,18 @@
+<mat-toolbar class="w-full elevated sticky top-0 z-50">
+  <div class="max-w-[1200px] mx-auto w-full items-center flex justify-between">
+    <h1 class="text-xl font-bold select-none hover:cursor-pointer" [routerLink]="ROOT_PATHS.home">
+      E-Commerce
+    </h1>
+
+    <div class="flex items-center gap-2">
+      <button matIconButton [routerLink]="WISHLIST_PATHS.wishList">
+        <mat-icon>favorite</mat-icon>
+      </button>
+      <button matIconButton>
+        <mat-icon>shopping_cart</mat-icon>
+      </button>
+      <button matButton>Sign In</button>
+      <button matButton="filled">Sign Up</button>
+    </div>
+  </div>
+</mat-toolbar>

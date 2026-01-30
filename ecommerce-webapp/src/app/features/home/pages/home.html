@@ -1,0 +1,17 @@
+<section class="p-4">
+  <div class="max-w-[1200px] mx-auto w-full">
+    @if (productResource.hasValue()) {
+      <div class="grid grid-cols-[repeat(auto-fill,minmax(270px,1fr))] gap-4">
+        @for (item of productResource.data(); track item.code) {
+          <app-product-card [product]="item" (handleAddToCart)="handleAddToCart($event)" />
+        }
+      </div>
+
+      <app-pagination
+        [length]="productResource.totalElements()"
+        [pageIndex]="productResource.pageIndex()"
+        (pageChange)="handlePageEvent($event)"
+      />
+    }
+  </div>
+</section>
