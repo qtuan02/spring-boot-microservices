@@ -1,8 +1,7 @@
 import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
-import { ENVIRONMENT } from '../tokens/environment.token';
+import { ENVIRONMENT } from '~/core/tokens/environment.token';
 
 export interface RequestOptions {
   path: string;

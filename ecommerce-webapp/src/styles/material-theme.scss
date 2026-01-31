@@ -84,6 +84,14 @@ button[matButton] {
       tonal-horizontal-padding: 12px,
       filled-icon-spacing: 0px,
       filled-icon-offset: 1px,
+      outlined-icon-spacing: 0px,
+      outlined-icon-offset: 1px,
+      text-icon-spacing: 0px,
+      text-icon-offset: 1px,
+      protected-icon-spacing: 0px,
+      protected-icon-offset: 1px,
+      tonal-icon-spacing: 0px,
+      tonal-icon-offset: 1px,
       filled-container-height: 36px,
       outlined-container-height: 36px,
       text-container-height: 36px,
@@ -174,4 +182,3 @@ mat-sidenav {
 .mdc-notched-outline__notch {
   border-right: none !important;
 }
-

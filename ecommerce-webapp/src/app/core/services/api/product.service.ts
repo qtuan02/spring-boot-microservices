@@ -3,18 +3,19 @@ import { HttpContext, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { BaseService } from './base.service';
-import { Product, ProductListResponse } from '~/shared/types/products';
-import { CACHING_ENABLED } from '../interceptors/caching.interceptor';
+import { Product, ProductListResponse } from '~/shared/types/product';
 import { PageParams } from '~/shared/types/pagination';
+import { CACHING_ENABLED } from '~/core/interceptors/caching.interceptor';
 
 @Injectable({ providedIn: 'root' })
 export class ProductService extends BaseService {
   private readonly endpoint = '/catalog/api/products';
 
-  getProducts(pageParams: PageParams | null): Observable<ProductListResponse> {
+  getProducts(pageParams?: PageParams): Observable<ProductListResponse> {
     let params = new HttpParams();
     if (pageParams?.page) params = params.set('page', pageParams.page.toString());
     if (pageParams?.size) params = params.set('size', pageParams.size.toString());
+    if (pageParams?.category) params = params.set('category', pageParams.category);
 
     return this.get<ProductListResponse>({
       path: this.endpoint,

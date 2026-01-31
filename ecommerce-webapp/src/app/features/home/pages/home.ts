@@ -1,25 +1,40 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
+import { ActivatedRoute, Router } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 
 import { injectProductList } from '../services/product';
-import { ProductCard } from '~/shared/components/product-card/product-card';
 import { PageParams } from '~/shared/types/pagination';
 import { Pagination } from '~/shared/components/pagination/pagination';
-import { Product } from '~/shared/types/products';
+import { Sidebar } from '../components/sidebar/sidebar';
+import { LayoutContent } from '~/shared/directives/layout-content';
+import { ProductCard } from '~/shared/components/product-card/product-card';
 
 @Component({
   selector: 'app-home',
-  imports: [ProductCard, Pagination],
+  imports: [ProductCard, Pagination, Sidebar, LayoutContent],
   templateUrl: './home.html',
 })
 export class Home {
-  pagination = signal<PageParams>({ page: 1, size: 8 });
+  protected readonly Array = Array;
 
-  productResource = injectProductList(this.pagination);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
-  handleAddToCart(product: Product) {
-    console.log(product);
-  }
+  pagination = signal<PageParams>({ page: 1, size: 10 });
+
+  categoryCode = toSignal(
+    this.route.queryParams.pipe(map((params) => (params['category'] as string) || null)),
+    { initialValue: null },
+  );
+
+  params = computed<PageParams>(() => ({
+    ...this.pagination(),
+    category: this.categoryCode() ?? undefined,
+  }));
+
+  productResource = injectProductList(this.params);
 
   handlePageEvent(e: PageEvent) {
     this.pagination.set({
@@ -27,5 +42,15 @@ export class Home {
       size: e.pageSize,
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  handleCategoryChange(categoryCode: string | null) {
+    this.pagination.set({ page: 1, size: this.pagination().size });
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { category: categoryCode || null },
+      queryParamsHandling: 'merge',
+    });
   }
 }

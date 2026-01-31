@@ -5,10 +5,12 @@
     </h1>
 
     <div class="flex items-center gap-2">
-      <button matIconButton [routerLink]="WISHLIST_PATHS.wishList">
-        <mat-icon>favorite</mat-icon>
-      </button>
-      <button matIconButton>
+      <button
+        matIconButton
+        [routerLink]="CART_PATHS.cart"
+        [matBadge]="cartStore.count()"
+        [matBadgeHidden]="cartStore.count() === 0"
+      >
         <mat-icon>shopping_cart</mat-icon>
       </button>
       <button matButton>Sign In</button>

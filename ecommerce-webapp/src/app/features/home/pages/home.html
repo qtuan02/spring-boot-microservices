@@ -1,22 +1,47 @@
 <section class="p-4">
-  <div class="max-w-[1200px] mx-auto w-full">
-    <!-- <h1 class="text-2xl font-bold text-gray-900 h-full mb-2">All</h1> -->
+  <div appLayoutContent>
+    <app-sidebar
+      [selectedCategory]="categoryCode()"
+      (categoryChange)="handleCategoryChange($event)"
+    >
+      <div class="bg-gray-200 mx-1.25 py-1 px-3"></div>
 
-    @if (productResource.hasValue()) {
-      <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
-        @for (item of productResource.data(); track item.code) {
-          <app-product-card [product]="item" (handleAddToCart)="handleAddToCart($event)" />
-        }
-      </div>
+      @if (productResource.isLoading()) {
+        <div class="grid grid-cols-5">
+          @for (i of Array.from({ length: 10 }); track i) {
+            <div class="max-w-[200px] p-1.25">
+              <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div class="h-[250px] bg-gray-200 animate-pulse"></div>
+                <div class="p-2">
+                  <div class="h-4 bg-gray-200 rounded animate-pulse mb-2"></div>
+                  <div class="h-4 bg-gray-200 rounded animate-pulse w-3/4 mb-3"></div>
+                  <div class="flex justify-between">
+                    <div class="h-5 w-16 bg-gray-200 rounded animate-pulse"></div>
+                    <div class="h-4 w-12 bg-gray-200 rounded animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
 
-      <app-pagination
-        class="mt-5 mb-2 justify-end flex"
-        [pageSizeOptions]="[10, 15, 20]"
-        [pageSize]="productResource.pageSize()"
-        [pageIndex]="productResource.pageIndex()"
-        [length]="productResource.totalElements()"
-        (pageChange)="handlePageEvent($event)"
-      />
-    }
+      @if (productResource.hasValue()) {
+        <div class="grid grid-cols-5">
+          @for (item of productResource.data(); track item.code) {
+            <app-product-card [product]="item" />
+          }
+        </div>
+      }
+    </app-sidebar>
+
+    <app-pagination
+      class="mt-5 mb-2 justify-end flex"
+      [pageSizeOptions]="[10, 15, 20, 25]"
+      [pageSize]="productResource.pageSize()"
+      [pageIndex]="productResource.pageIndex()"
+      [length]="productResource.totalElements()"
+      (pageChange)="handlePageEvent($event)"
+    />
   </div>
 </section>

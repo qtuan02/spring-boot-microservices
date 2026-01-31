@@ -7,6 +7,4 @@ import { Header } from '~/features/layout/header/header';
   imports: [RouterOutlet, Header],
   templateUrl: './app.html',
 })
-export class App {
-  protected readonly title = signal('ecommerce-webapp');
-}
+export class App {}

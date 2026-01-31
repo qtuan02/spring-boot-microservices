@@ -17,5 +17,5 @@ export type ResponseError = {
   instance: string;
   service: string;
   timestamp: string;
+  error: string;
 };
-

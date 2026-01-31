@@ -1,6 +1,6 @@
 import { Author } from './author';
 import { Category } from './category';
-import { ResponseError, ResponsePageList } from './response';
+import { ResponsePageList } from './response';
 
 export type Product = {
   code: string;
@@ -14,7 +14,3 @@ export type Product = {
 };
 
 export type ProductListResponse = ResponsePageList<Product>;
-
-export type ProductResponseError = ResponseError & {
-  error_category: string;
-};

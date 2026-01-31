@@ -1,0 +1,17 @@
+<div appLayoutCard>
+  @if (cartStore.items().length === 0) {
+    <div class="text-center text-gray-500">Your cart is empty</div>
+  } @else {
+    <div class="grid grid-cols-[80px_3fr_1fr_1fr_1fr] items-center mb-4">
+      <div class="col-span-2 text-base text-gray-800">Product</div>
+      <div class="text-center text-base text-gray-800">Price</div>
+      <div class="text-center text-base text-gray-800">Quantity</div>
+      <div class="text-center text-base text-gray-800">Total</div>
+    </div>
+    <div class="flex flex-col gap-4">
+      @for (item of cartStore.items(); track item.product.code) {
+        <app-cart-item [item]="item" />
+      }
+    </div>
+  }
+</div>
