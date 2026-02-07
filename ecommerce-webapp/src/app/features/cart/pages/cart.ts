@@ -12,7 +12,7 @@ import { SummarizeOrder } from '../components/summarize-order/summarize-order';
   templateUrl: './cart.html',
 })
 export class Cart {
-  private readonly navigate = inject(Navigate);
+  private navigate = inject(Navigate);
 
   handleBack() {
     this.navigate.redirect(ROOT_PATHS.home);

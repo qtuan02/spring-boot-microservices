@@ -8,7 +8,7 @@ import { injectCategoryList } from '../../services/category';
   templateUrl: './sidebar.html',
 })
 export class Sidebar {
-  protected readonly Array = Array;
+  Array = Array;
 
   selectedCategory = input<string | null>(null);
   categoryChange = output<string | null>();

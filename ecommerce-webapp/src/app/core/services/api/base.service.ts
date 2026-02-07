@@ -11,8 +11,8 @@ export interface RequestOptions {
 
 @Injectable({ providedIn: 'root' })
 export class BaseService {
-  private readonly http = inject(HttpClient);
-  private readonly baseUrl = inject(ENVIRONMENT).apiBaseUrl;
+  private http = inject(HttpClient);
+  private baseUrl = inject(ENVIRONMENT).apiBaseUrl;
 
   protected get<T>({ path, params, context }: RequestOptions): Observable<T> {
     return this.http.get<T>(`${this.baseUrl}${path}`, {

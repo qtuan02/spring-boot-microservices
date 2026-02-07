@@ -20,6 +20,7 @@ export type ConfirmDialogData = {
   selector: 'app-confirm-dialog',
   imports: [MatButton, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose],
   templateUrl: './confirm-dialog.html',
+  host: { class: '' },
 })
 export class ConfirmDialog {
   readonly dialogRef = inject(MatDialogRef<ConfirmDialog>);

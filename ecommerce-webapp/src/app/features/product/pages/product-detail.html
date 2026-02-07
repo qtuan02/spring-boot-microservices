@@ -1,0 +1,124 @@
+<section class="p-4">
+  <div appLayoutContent>
+    @if (productResource.isLoading()) {
+      <!-- Loading Skeleton -->
+      <div class="flex gap-10 mb-8 animate-pulse">
+        <!-- Image Skeleton -->
+        <div class="w-[500px] h-[550px] bg-gray-200 rounded-lg"></div>
+
+        <div class="flex-1">
+          <!-- Category Skeleton -->
+          <div class="h-6 w-24 bg-gray-200 rounded-xl mb-2"></div>
+
+          <!-- Title Skeleton -->
+          <div class="h-8 w-3/4 bg-gray-200 rounded mb-3"></div>
+
+          <!-- Price Skeleton -->
+          <div class="h-10 w-32 bg-gray-200 rounded mb-4"></div>
+
+          <!-- Stock Info Skeleton -->
+          <div class="h-12 w-full bg-gray-200 rounded-lg mb-4"></div>
+
+          <!-- Description Label Skeleton -->
+          <div class="h-5 w-24 bg-gray-200 rounded mb-2"></div>
+
+          <!-- Description Skeleton -->
+          <div class="space-y-2 border-b border-gray-200 pb-4">
+            <div class="h-4 w-full bg-gray-200 rounded"></div>
+            <div class="h-4 w-5/6 bg-gray-200 rounded"></div>
+            <div class="h-4 w-4/6 bg-gray-200 rounded"></div>
+          </div>
+
+          <!-- Quantity Skeleton -->
+          <div class="flex items-center gap-2 mb-3 pt-4">
+            <div class="h-5 w-20 bg-gray-200 rounded"></div>
+            <div class="h-10 w-32 bg-gray-200 rounded"></div>
+          </div>
+
+          <!-- Buttons Skeleton -->
+          <div class="flex gap-4 border-b border-gray-200 pb-4">
+            <div class="h-12 w-2/3 bg-gray-200 rounded"></div>
+            <div class="h-12 w-12 bg-gray-200 rounded"></div>
+          </div>
+
+          <!-- Features Skeleton -->
+          <div class="pt-6 flex flex-col gap-2">
+            <div class="h-4 w-48 bg-gray-200 rounded"></div>
+            <div class="h-4 w-40 bg-gray-200 rounded"></div>
+            <div class="h-4 w-44 bg-gray-200 rounded"></div>
+          </div>
+        </div>
+      </div>
+    }
+    @if (productResource.hasValue()) {
+      <div class="flex gap-10 mb-8">
+        <img
+          [src]="productResource.data()?.imageUrl"
+          class="w-[500px] h-[550px] object-cover rounded-lg"
+          [style.view-transition-name]="'product-image-' + productResource.data()?.code"
+        />
+
+        <div class="flex-1">
+          <div class="text-xs rounded-xl bg-gray-100 px-2 py-1 w-fit mb-2">
+            {{ productResource.data()?.category?.name }}
+          </div>
+
+          <h1 class="text-2xl font-extrabold mb-3">
+            {{ productResource.data()?.name }}
+          </h1>
+
+          <p class="text-3xl font-extrabold mb-4">$ {{ productResource.data()?.price }}</p>
+
+          <div
+            class="flex items-center gap-2 border border-gray-200 rounded-lg px-3 py-3 bg-white w-full mb-4"
+          >
+            <mat-icon class="small">check_circle</mat-icon>
+            <span class="text-xs text-gray-800">In stock and ready to ship</span>
+          </div>
+
+          <p class="font-semibold mb-2">Description</p>
+          <p class="text-gray-600 border-b border-gray-200 pb-4">
+            {{ productResource.data()?.description }}
+          </p>
+
+          <div class="flex items-center gap-2 mb-3 pt-4">
+            <span class="font-semibold">Quantity:</span>
+            <app-quantity-selector
+              [minQuantity]="1"
+              [quantity]="quantity()"
+              (quantityChange)="quantity.set($event)"
+            />
+          </div>
+
+          <div class="flex gap-4 border-b border-gray-200 pb-4">
+            <button
+              matButton="filled"
+              class="w-2/3 flex items-center gap-2"
+              (click)="handleAddToCart()"
+            >
+              <mat-icon>shopping_cart</mat-icon> Add to Cart
+            </button>
+            <button matIconButton>
+              <mat-icon>share</mat-icon>
+            </button>
+          </div>
+
+          <div class="pt-6 flex flex-col gap-2 text-gray-700 text-xs">
+            <div class="flex items-center gap-3">
+              <mat-icon class="small">local_shipping</mat-icon>
+              <span>Free shipping on orders over $50</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <mat-icon class="small">autorenew</mat-icon>
+              <span>30-day return policy</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <mat-icon class="small">shield</mat-icon>
+              <span>2-year warranty included</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>

@@ -3,6 +3,7 @@
     <img
       [src]="item().product.imageUrl"
       class="size-20 border border-gray-200 rounded-sm object-fill"
+      [style.view-transition-name]="'product-image-' + item().product.code"
     />
 
     <div class="text-gray-900 text-xl pl-2 pr-5 line-clamp-3 leading-tight">

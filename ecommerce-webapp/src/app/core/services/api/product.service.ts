@@ -9,7 +9,7 @@ import { CACHING_ENABLED } from '~/core/interceptors/caching.interceptor';
 
 @Injectable({ providedIn: 'root' })
 export class ProductService extends BaseService {
-  private readonly endpoint = '/catalog/api/products';
+  private endpoint = '/catalog/api/products';
 
   getProducts(pageParams?: PageParams): Observable<ProductListResponse> {
     let params = new HttpParams();

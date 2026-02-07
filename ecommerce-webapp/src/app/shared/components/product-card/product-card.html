@@ -1,10 +1,14 @@
 <div class="max-w-[200px] p-1.25">
   <div
     class="group bg-white cursor-pointer rounded-xl shadow-sm overflow-hidden flex flex-col h-full transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-md"
-    [routerLink]="[PRODUCT_PATHS.product, product().code]"
+    [routerLink]="[PRODUCT_PATHS.product, generateSlugFn(product().name, product().code)]"
   >
     <div class="relative h-[250px] overflow-hidden">
-      <img [src]="product().imageUrl" class="w-full h-full object-fill rounded-t-xl" />
+      <img
+        [src]="product().imageUrl"
+        class="w-full h-full object-fill rounded-t-xl"
+        [style.view-transition-name]="'product-image-' + product().code"
+      />
 
       <button
         matButton="filled"

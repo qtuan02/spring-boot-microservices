@@ -5,6 +5,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
   selector: 'app-pagination',
   imports: [MatPaginatorModule],
   templateUrl: './pagination.html',
+  host: { class: '' },
 })
 export class Pagination {
   length = input.required<number>();

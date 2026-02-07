@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class Navigate {
-  private readonly router = inject(Router);
+  private router = inject(Router);
 
   redirect(path: string | string[]): void {
     const commands = Array.isArray(path) ? path : [path];

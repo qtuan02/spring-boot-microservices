@@ -5,16 +5,19 @@ import { MatAnchor } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { CartStore } from '~/core/stores/cart-store';
 import { PRODUCT_PATHS } from '~/core/constants/path';
+import { generateSlugFn } from '~/shared/utils/slug';
 
 @Component({
   selector: 'app-product-card',
   imports: [MatAnchor, MatIcon, RouterLink],
   templateUrl: './product-card.html',
+  host: { class: '' },
 })
 export class ProductCard {
-  private readonly cartStore = inject(CartStore);
+  private cartStore = inject(CartStore);
 
-  protected readonly PRODUCT_PATHS = PRODUCT_PATHS;
+  PRODUCT_PATHS = PRODUCT_PATHS;
+  generateSlugFn = generateSlugFn;
 
   product = input.required<Product>();
 

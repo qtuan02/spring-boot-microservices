@@ -16,7 +16,7 @@ import {
   templateUrl: './cart-item.html',
 })
 export class CartItem {
-  private readonly dialog = inject(MatDialog);
+  private dialog = inject(MatDialog);
   readonly cartStore = inject(CartStore);
 
   item = input.required<CartItemType>();
