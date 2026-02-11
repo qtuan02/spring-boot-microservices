@@ -3,6 +3,10 @@ package com.qtuan02.catalog.domain.products;
 import com.qtuan02.catalog.clients.inventory.Inventory;
 import com.qtuan02.catalog.clients.inventory.InventoryServiceClient;
 import com.qtuan02.catalog.domain.models.PagedResult;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,11 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional

@@ -15,7 +15,7 @@ class InventoryControllerTest extends AbstractIT {
     void shouldReturnStocksByProductCodes() {
         given().contentType(ContentType.JSON)
                 .when()
-                .get("/api/inventory/stocks-by-product-codes?productCodes=P100,P101,P102")
+                .get("/api/inventories/stocks-by-product-codes?productCodes=P100,P101,P102")
                 .then()
                 .statusCode(200)
                 .body("data", hasSize(3));

@@ -11,8 +11,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @RestControllerAdvice
 class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-    private static final URI NOT_FOUND_TYPE = URI.create("https://api.bookstore.com/errors/not-found");
-    private static final URI ISE_FOUND_TYPE = URI.create("https://api.bookstore.com/errors/server-error");
+    private static final URI NOT_FOUND_TYPE = URI.create("https://api.ecommerce.com/errors/not-found");
+    private static final URI ISE_FOUND_TYPE = URI.create("https://api.ecommerce.com/errors/server-error");
     private static final String SERVICE_NAME = "catalog-service";
 
     @ExceptionHandler(Exception.class)
