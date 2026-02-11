@@ -50,6 +50,7 @@
         </div>
       </div>
     }
+
     @if (productResource.hasValue()) {
       <div class="flex gap-10 mb-8">
         <img
@@ -69,13 +70,23 @@
 
           <p class="text-3xl font-extrabold mb-4">$ {{ productResource.data()?.price }}</p>
 
-          <div
-            class="flex items-center gap-2 border border-gray-200 rounded-lg px-3 py-3 bg-white w-full mb-4"
-          >
-            <mat-icon class="small">check_circle</mat-icon>
-            <span class="text-xs text-gray-800">In stock and ready to ship</span>
-          </div>
-
+          @if (!!productResource.data()?.quantity) {
+            <div
+              class="flex items-center gap-2 border border-gray-200 rounded-lg px-3 py-3 bg-white w-full mb-4"
+            >
+              <mat-icon class="small">check_circle</mat-icon>
+              <span class="text-xs text-gray-800"
+                >In stock {{ productResource.data()?.quantity }} and ready to ship</span
+              >
+            </div>
+          } @else {
+            <div
+              class="flex items-center gap-2 border border-red-700 rounded-lg px-3 py-3 bg-white w-full danger mb-4"
+            >
+              <mat-icon class="small">warning</mat-icon>
+              <span class="text-xs">This item is currently out of stock.</span>
+            </div>
+          }
           <p class="font-semibold mb-2">Description</p>
           <p class="text-gray-600 border-b border-gray-200 pb-4">
             {{ productResource.data()?.description }}
@@ -85,6 +96,7 @@
             <span class="font-semibold">Quantity:</span>
             <app-quantity-selector
               [minQuantity]="1"
+              [maxQuantity]="productResource.data()?.quantity || 0"
               [quantity]="quantity()"
               (quantityChange)="quantity.set($event)"
             />
@@ -95,8 +107,10 @@
               matButton="filled"
               class="w-2/3 flex items-center gap-2"
               (click)="handleAddToCart()"
+              [disabled]="!productResource.data()?.quantity"
             >
-              <mat-icon>shopping_cart</mat-icon> Add to Cart
+              <mat-icon>shopping_cart</mat-icon>
+              {{ !productResource.data()?.quantity ? 'Out of stock' : 'Add to Cart' }}
             </button>
             <button matIconButton>
               <mat-icon>share</mat-icon>

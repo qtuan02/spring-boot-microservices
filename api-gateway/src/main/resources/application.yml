@@ -22,12 +22,18 @@ spring:
                 - Path=/catalog/**
               filters:
                 - RewritePath=/catalog/?(?<segment>.*), /${segment}
-            - id: orders-service
-              uri: ${ORDER_SERVICE_URL:http://localhost:8082}
+            - id: inventory-service
+              uri: ${INVENTORY_SERVICE_URL:http://localhost:8082}
               predicates:
-                - Path=/orders/**
+                - Path=/inventory/**
               filters:
-                - RewritePath=/orders/?(?<segment>.*), /${segment}
+                - RewritePath=/inventory/?(?<segment>.*), /${segment}
+            #            - id: orders-service
+            #              uri: ${ORDER_SERVICE_URL:http://localhost:8082}
+            #              predicates:
+            #                - Path=/orders/**
+            #              filters:
+            #                - RewritePath=/orders/?(?<segment>.*), /${segment}
             - id: openapi
               uri: http://localhost:${server.port}
               predicates:
@@ -39,7 +45,7 @@ spring:
               enabled: true
           globalcors:
             cors-configurations:
-              '[/**]':
+              "[/**]":
                 allowed-origins: "*"
                 allowed-methods: "*"
                 allowed-headers: "*"

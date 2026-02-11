@@ -27,7 +27,12 @@
 
       <div class="flex items-end justify-between">
         <span class="text-base font-bold text-blue-700">${{ product().price }}</span>
-        <div class="text-[10px] font-medium text-green-700">In Stock</div>
+        @if (product().quantity > 0) {
+          <div class="text-[10px] font-medium text-green-700">In Stock</div>
+        }
+        @if (product().quantity === 0) {
+          <div class="text-[10px] font-medium text-red-700">Out of Stock</div>
+        }
       </div>
     </div>
   </div>

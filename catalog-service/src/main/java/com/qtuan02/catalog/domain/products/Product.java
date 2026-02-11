@@ -10,6 +10,7 @@ public record Product(
         String description,
         String imageUrl,
         BigDecimal price,
+        Integer quantity,
         Category category,
         Author author,
         String[] tags) {}
