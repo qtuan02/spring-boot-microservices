@@ -28,12 +28,12 @@ spring:
                 - Path=/inventory/**
               filters:
                 - RewritePath=/inventory/?(?<segment>.*), /${segment}
-            #            - id: orders-service
-            #              uri: ${ORDER_SERVICE_URL:http://localhost:8082}
-            #              predicates:
-            #                - Path=/orders/**
-            #              filters:
-            #                - RewritePath=/orders/?(?<segment>.*), /${segment}
+            - id: orders-service
+              uri: ${ORDER_SERVICE_URL:http://localhost:8082}
+              predicates:
+                - Path=/orders/**
+              filters:
+                - RewritePath=/orders/?(?<segment>.*), /${segment}
             - id: openapi
               uri: http://localhost:${server.port}
               predicates:

@@ -3,17 +3,14 @@ package com.qtuan02.order.web.controllers;
 import com.qtuan02.order.domain.OrderNotFoundException;
 import com.qtuan02.order.domain.OrderService;
 import com.qtuan02.order.domain.SecurityService;
-import com.qtuan02.order.domain.models.CreateOrderRequest;
-import com.qtuan02.order.domain.models.CreateOrderResponse;
-import com.qtuan02.order.domain.models.OrderDTO;
-import com.qtuan02.order.domain.models.OrderSummary;
+import com.qtuan02.order.domain.models.*;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -30,8 +27,7 @@ class OrderController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    CreateOrderResponse createOrder(@Valid @RequestBody CreateOrderRequest request) {
+    Response<CreateOrderResponse> createOrder(@Valid @RequestBody CreateOrderRequest request) {
         String userName = securityService.getLoginUserName();
         log.info("Creating order for user: {}", userName);
         return orderService.createOrder(userName, request);

@@ -2,15 +2,7 @@ package com.qtuan02.order.web.exception;
 
 import com.qtuan02.order.domain.InvalidOrderException;
 import com.qtuan02.order.domain.OrderNotFoundException;
-import java.net.URI;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ProblemDetail;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,11 +10,16 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.net.URI;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+
 @RestControllerAdvice
 class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-    private static final URI NOT_FOUND_TYPE = URI.create("https://api.bookstore.com/errors/not-found");
-    private static final URI ISE_FOUND_TYPE = URI.create("https://api.bookstore.com/errors/server-error");
-    private static final URI BAD_REQUEST_TYPE = URI.create("https://api.bookstore.com/errors/bad-request");
+    private static final URI NOT_FOUND_TYPE = URI.create("https://api.ecommerce.com/errors/not-found");
+    private static final URI ISE_FOUND_TYPE = URI.create("https://api.ecommerce.com/errors/server-error");
+    private static final URI BAD_REQUEST_TYPE = URI.create("https://api.ecommerce.com/errors/bad-request");
     private static final String SERVICE_NAME = "order-service";
 
     @ExceptionHandler(Exception.class)
@@ -32,7 +29,7 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         problemDetail.setTitle("Internal Server Error");
         problemDetail.setType(ISE_FOUND_TYPE);
         problemDetail.setProperty("service", SERVICE_NAME);
-        problemDetail.setProperty("error_order", "Generic");
+        problemDetail.setProperty("error", "Generic");
         problemDetail.setProperty("timestamp", Instant.now());
         return problemDetail;
     }
@@ -43,7 +40,7 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         problemDetail.setTitle("Product Not Found");
         problemDetail.setType(NOT_FOUND_TYPE);
         problemDetail.setProperty("service", SERVICE_NAME);
-        problemDetail.setProperty("error_order", "Generic");
+        problemDetail.setProperty("error", "Generic");
         problemDetail.setProperty("timestamp", Instant.now());
         return problemDetail;
     }
@@ -54,7 +51,7 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         problemDetail.setTitle("Invalid Order Creation Request");
         problemDetail.setType(BAD_REQUEST_TYPE);
         problemDetail.setProperty("service", SERVICE_NAME);
-        problemDetail.setProperty("error_category", "Generic");
+        problemDetail.setProperty("error", "Generic");
         problemDetail.setProperty("timestamp", Instant.now());
         return problemDetail;
     }
@@ -73,7 +70,7 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         problemDetail.setType(BAD_REQUEST_TYPE);
         problemDetail.setProperty("errors", errors);
         problemDetail.setProperty("service", SERVICE_NAME);
-        problemDetail.setProperty("error_category", "Generic");
+        problemDetail.setProperty("error", "Generic");
         problemDetail.setProperty("timestamp", Instant.now());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
     }

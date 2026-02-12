@@ -1,8 +1,8 @@
-version: '3'
+version: "3"
 
 vars:
   GOOS: "{{default OS .GOOS}}"
-# MVNW: '{{if eq .GOOS "windows"}}mvnw.cmd{{else}}./mvnw{{end}}' <- Mac OS
+  # MVNW: '{{if eq .GOOS "windows"}}mvnw.cmd{{else}}./mvnw{{end}}' <- Mac OS
   MVNW: '{{if eq .GOOS "windows"}}cmd /c mvnw.cmd{{else}}./mvnw{{end}}'
   DC_DIR: "deployment/docker-compose"
   INFRA_DC_FILE: "{{.DC_DIR}}/infra.yml"
@@ -30,8 +30,8 @@ tasks:
     cmds:
       - "{{.MVNW}} -pl catalog-service spring-boot:build-image -DskipTests"
       - "{{.MVNW}} -pl inventory-service spring-boot:build-image -DskipTests"
-#      - "{{.MVNW}} -pl order-service spring-boot:build-image -DskipTests"
-#      - "{{.MVNW}} -pl notification-service spring-boot:build-image -DskipTests"
+      - "{{.MVNW}} -pl order-service spring-boot:build-image -DskipTests"
+      - "{{.MVNW}} -pl notification-service spring-boot:build-image -DskipTests"
       - "{{.MVNW}} -pl api-gateway spring-boot:build-image -DskipTests"
 
   start_infra:

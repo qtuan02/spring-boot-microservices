@@ -1,4 +1,4 @@
-package com.qtuan02.inventory.domain.models;
+package com.qtuan02.order.domain.models;
 
 import org.springframework.http.HttpStatus;
 

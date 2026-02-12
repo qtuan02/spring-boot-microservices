@@ -1,12 +1,13 @@
 package com.qtuan02.order.domain;
 
 import com.qtuan02.order.domain.models.*;
-import java.util.List;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -24,15 +25,16 @@ public class OrderService {
         this.orderEventService = orderEventService;
     }
 
-    public CreateOrderResponse createOrder(String userName, CreateOrderRequest request) {
-        orderValidator.validate(request);
+    public Response<CreateOrderResponse> createOrder(String userName, CreateOrderRequest request) {
+        orderValidator.validatePriceProduct(request);
         OrderEntity newOrder = OrderMapper.convertToEntity(request);
         newOrder.setUserName(userName);
+        orderValidator.validateDeductInventory(newOrder.getOrderNumber(), request);
         OrderEntity savedOrder = this.orderRepository.save(newOrder);
         log.info("Created Order with orderNumber={}", savedOrder.getOrderNumber());
         OrderCreatedEvent orderCreatedEvent = OrderEventMapper.buildOrderCreatedEvent(savedOrder);
         orderEventService.save(orderCreatedEvent);
-        return new CreateOrderResponse(savedOrder.getOrderNumber());
+        return Response.success(new CreateOrderResponse(savedOrder.getOrderNumber()), "Order created successfully");
     }
 
     public List<OrderSummary> findOrders(String userName) {
