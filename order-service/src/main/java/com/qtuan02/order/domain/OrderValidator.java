@@ -6,12 +6,11 @@ import com.qtuan02.order.clients.inventory.Inventory;
 import com.qtuan02.order.clients.inventory.InventoryServiceClient;
 import com.qtuan02.order.domain.models.CreateOrderRequest;
 import com.qtuan02.order.domain.models.OrderItem;
+import java.util.List;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Set;
 
 @Component
 public class OrderValidator {

@@ -1,120 +1,347 @@
-# Spring Boot Microservices
+# Spring Boot Microservices - E-Commerce System
 
-Dự án E-Commerce mẫu (Microservices + Monorepo) minh họa cách xây dựng hệ thống phân tán hiện đại.
+Hệ thống E-Commerce demo với kiến trúc **Microservices + Monorepo**, minh họa các best practices khi xây dựng ứng dụng phân tán.
 
-## Tech Stack & Tooling
+## 📋 Mục Lục
 
-- **Core**: Java 21, Spring Boot 3.5.9, Maven
-- **Infrastructure**: PostgreSQL, RabbitMQ, Docker
-- **Dev Tools**:
-  - **Task (Taskfile)**: Chạy lệnh nhanh (start infra, build, test...)
-  - **Flyway**: Quản lý database migrations
-  - **Testcontainers**: Integration testing với Docker
-  - **Spotless**: Auto-format code
+- [Giới Thiệu](#giới-thiệu)
+- [Kiến Trúc](#kiến-trúc)
+- [Tech Stack](#tech-stack)
+- [Cần Chuẩn Bị](#cần-chuẩn-bị)
+- [Quick Start](#quick-start)
+- [Services](#services)
+- [Truy Cập](#truy-cập)
+- [Tài Liệu](#tài-liệu)
 
-## 1. Setup Environment
+## Giới Thiệu
 
-### Windows
+Dự án E-Commerce mẫu demo các concepts quan trọng trong Microservices:
 
-Cài đặt thủ công và thêm vào Environment Variables (Path):
+- ✅ **Service Independence** - Mỗi service có database riêng
+- ✅ **Event-Driven** - Giao tiếp bất đồng bộ qua RabbitMQ
+- ✅ **API Gateway** - Single entry point
+- ✅ **Resilience** - Circuit Breaker, Retry, Timeout
+- ✅ **Transactional Outbox** - Đảm bảo eventual consistency
+- ✅ **Database Migrations** - Flyway version control
+- ✅ **Containerization** - Docker ready
+- ✅ **CI/CD** - GitHub Actions automated testing
 
-1.  **JDK 21**: [Adoptium](https://adoptium.net/)
-2.  **Maven 3.9+**: [Apache Maven](https://maven.apache.org/download.cgi)
-3.  **Docker Desktop**: [Docker](https://www.docker.com/products/docker-desktop/) (Bắt buộc)
-4.  **Task** (Optional): [Taskfile Installation](https://taskfile.dev/installation/) - Giúp chạy các lệnh setup nhanh hơn.
+## Kiến Trúc
 
-### Mac / Linux
-
-Dự án sử dụng **SDKMAN** để quản lý version. Tạo file `.sdkmanrc` tại thư mục gốc:
-
-```text
-java=21.0.9-tem
-maven=3.9.12
+```
+                                           ┌──────────────────┐
+                                      ┌───▶│  Catalog Service │◀─┐
+                                      │    │   (Port 8081)    │  │
+                                      │    └──────────────────┘  │
+                                      │                          │
+┌────────┐      ┌─────────────┐      │    ┌──────────────────┐  │
+│  User  │─────▶│ API Gateway │──────┼───▶│ Inventory Service│◀─┤ HTTP
+│ Client │      │ (Port 8989) │      │    │   (Port 8082)    │  │ (Sync)
+└────────┘      └─────────────┘      │    └──────────────────┘  │
+                                      │                          │
+                                      │    ┌──────────────────┐  │
+                                      └───▶│  Order Service   │──┘
+                                           │   (Port 8083)    │
+                                           └────────┬─────────┘
+                                                    │
+                                                    │ Events
+                                                    ▼
+                                           ┌─────────────────┐
+                                           │    RabbitMQ     │
+                                           │  (Port 5672)    │
+                                           └────────┬────────┘
+                                                    │ Events
+                                                    ▼
+                                           ┌──────────────────┐
+                                           │   Notification   │
+                                           │     Service      │
+                                           │   (Port 8084)    │
+                                           └──────────────────┘
 ```
 
-Sau đó chạy lệnh để cài đặt và kích hoạt:
+**Communication**:
+
+- **Sync (HTTP)**: Client → Gateway → Services, Order → Catalog/Inventory
+- **Async (RabbitMQ)**: Order → Notification (events)
+
+## Tech Stack
+
+**Core**:
+
+- Java 21 + Spring Boot 3.5.9 + Maven
+
+**Infrastructure**:
+
+- PostgreSQL 18 (mỗi service có DB riêng)
+- RabbitMQ 4.0.4 (message broker)
+- Spring Cloud Gateway (API Gateway)
+- MailHog (test email)
+- Docker + Docker Compose
+
+**Libraries quan trọng**:
+
+- `spring-boot-starter-data-jpa` - Database (Hibernate)
+- `flyway-core` - DB migrations
+- `springdoc-openapi` - Swagger docs
+- `resilience4j` - Circuit Breaker & Retry
+- `spring-boot-starter-amqp` - RabbitMQ
+- `testcontainers` - Testing với Docker
+- `shedlock` - Distributed locking
+
+**Dev Tools**:
+
+- Taskfile (task runner)
+- Spotless (code format)
+- GitHub Actions (CI/CD)
+
+## Cần Chuẩn Bị
+
+**Bắt buộc**:
+
+- JDK 21 - [Download từ Adoptium](https://adoptium.net/)
+- Docker Desktop - [Download](https://www.docker.com/products/docker-desktop/) (**PHẢI CÓ**)
+
+**Optional**:
+
+- Maven 3.9+ (hoặc dùng `mvnw` wrapper có sẵn)
+- Task - [Cài đặt Taskfile](https://taskfile.dev/installation/)
+
+## Quick Start
+
+### Cách 1: Local Development (Recommended khi đang code)
+
+Chạy từng service riêng để dễ debug.
+
+**Bước 1 - Start Infrastructure**:
+
+Bật Docker Desktop, sau đó:
 
 ```bash
-sdk env install && sdk env
-```
-
-## 2. Quick Start
-
-### Bước 1: Khởi động Infrastructure
-
-Bật **Docker Desktop**, sau đó mở terminal tại thư mục gốc dự án:
-
-```bash
-# Cách 1: Dùng Task (Nhanh nhất)
+# Nếu có Task
 task start_infra
 
-# Cách 2: Dùng Docker Compose thuần (nếu chưa cài Task)
+# Hoặc dùng Docker Compose
 docker compose -f deployment/docker-compose/infra.yml up -d
 ```
 
-_Lệnh này sẽ tải và chạy PostgreSQL & RabbitMQ._
+Lệnh này khởi động PostgreSQL, RabbitMQ và MailHog.
 
-### Bước 2: Chạy Services
+**Bước 2 - Chạy Services**:
 
-Mở 2 terminal riêng biệt:
+Mở terminal riêng cho từng service:
+
+```bash
+# Terminal 1
+cd catalog-service && ./mvnw spring-boot:run
+
+# Terminal 2
+cd inventory-service && ./mvnw spring-boot:run
+
+# Terminal 3
+cd order-service && ./mvnw spring-boot:run
+
+# Terminal 4
+cd notification-service && ./mvnw spring-boot:run
+
+# Terminal 5
+cd api-gateway && ./mvnw spring-boot:run
+```
+
+Windows dùng `mvnw.cmd` thay vì `./mvnw`.
+
+✅ Xong! Vào [http://localhost:8989/swagger-ui.html](http://localhost:8989/swagger-ui.html)
+
+---
+
+### Cách 2: Full Docker (Giống production)
+
+Chạy toàn bộ hệ thống trong Docker.
+
+```bash
+# Build images
+task build
+
+# Start tất cả
+task start
+
+# Check
+docker ps
+
+# Stop khi xong
+task stop
+```
+
+## Services
+
+Hệ thống gồm 5 services:
 
 **1. Catalog Service** (Port 8081)
 
+- Quản lý sản phẩm, categories, authors
+- [Swagger](http://localhost:8081/swagger-ui.html)
+
+**2. Inventory Service** (Port 8082)
+
+- Quản lý tồn kho
+- Deduct stock với pessimistic locking
+- [Swagger](http://localhost:8082/swagger-ui.html)
+
+**3. Order Service** (Port 8083)
+
+- Xử lý đơn hàng
+- Publish events sang RabbitMQ
+- Circuit breaker + retry patterns
+- [Swagger](http://localhost:8083/swagger-ui.html)
+
+**4. Notification Service** (Port 8084)
+
+- Gửi email notifications
+- Consume events từ RabbitMQ
+- Không có API public
+
+**5. API Gateway** (Port 8989)
+
+- Single entry point cho tất cả services
+- Tổng hợp Swagger UI
+- [Swagger](http://localhost:8989/swagger-ui.html) ⭐
+
+**Infrastructure**:
+
+- **RabbitMQ**: Ports 5672 (AMQP), 15672 (Management UI)
+  - Credentials: guest/guest
+- **MailHog**: Ports 1025 (SMTP), 8025 (Web UI)
+
+## Truy Cập
+
+Sau khi start services:
+
+**API Docs** (Swagger UI):
+
+- API Gateway: [http://localhost:8989/swagger-ui.html](http://localhost:8989/swagger-ui.html) ⭐ Dùng cái này
+- Hoặc truy cập từng service riêng (8081, 8082, 8083)
+
+**Management**:
+
+- RabbitMQ: [http://localhost:15672](http://localhost:15672) (guest/guest)
+- MailHog: [http://localhost:8025](http://localhost:8025)
+- Health checks: `http://localhost:<port>/actuator/health`
+
+**Test thử API**:
+
+Lấy danh sách sản phẩm:
+
 ```bash
-cd catalog-service
-./mvnw spring-boot:run
-# Windows dùng: mvnw.cmd spring-boot:run
+curl http://localhost:8989/catalog/api/products
 ```
 
-**2. Order Service** (Port 8082)
+Tạo đơn hàng:
 
 ```bash
-cd order-service
-./mvnw spring-boot:run
-# Windows dùng: mvnw.cmd spring-boot:run
+curl -X POST http://localhost:8989/orders/api/orders \
+  -H "Content-Type: application/json" \
+  -d '{
+    "customer": {
+      "name": "Nguyen Van A",
+      "email": "test@example.com",
+      "phone": "0123456789"
+    },
+    "deliveryAddress": {
+      "addressLine1": "123 Main St",
+      "city": "Hanoi",
+      "country": "VIETNAM"
+    },
+    "items": [
+      { "code": "P001", "name": "Product", "price": 29.99, "quantity": 1 }
+    ]
+  }'
 ```
 
-**3. Notification Service** (Port 8083)
+## Project Structure
 
-```bash
-cd notification-service
-./mvnw spring-boot:run
-# Windows dùng: mvnw.cmd spring-boot:run
+```
+spring-boot-microservices/
+├── .github/workflows/          # CI/CD pipelines
+├── deployment/docker-compose/  # Docker configs
+│   ├── infra.yml              # PostgreSQL, RabbitMQ, MailHog
+│   └── apps.yml               # Microservices
+├── docs/                      # Documentation
+│   ├── 1.structure.md
+│   ├── 2.catalog-service.md
+│   ├── 3.inventory-service.md
+│   ├── 4.order-service.md
+│   ├── 5.notification-service.md
+│   ├── 6.api-gateway.md
+│   ├── 7.docker.md
+│   ├── 8.github-actions.md
+│   └── 9.task.md
+├── catalog-service/
+├── inventory-service/
+├── order-service/
+├── notification-service/
+├── api-gateway/
+├── pom.xml                    # Parent POM
+├── Taskfile.yml
+└── README.md
 ```
 
-**4. API Gateway** (Port 8989)
+**Mỗi service theo Layered Architecture**:
 
-```bash
-cd api-gateway
-./mvnw spring-boot:run
-# Windows dùng: mvnw.cmd spring-boot:run
+```
+[service-name]/
+├── src/main/java/com/qtuan02/[service]/
+│   ├── web/         # Controllers, Exception Handlers
+│   ├── domain/      # Entities, Services, Repositories
+│   ├── clients/     # HTTP clients
+│   ├── events/      # Event handlers
+│   ├── jobs/        # Scheduled tasks
+│   └── config/      # Spring configs
+├── src/main/resources/
+│   ├── application.properties
+│   └── db/migration/    # Flyway SQL scripts
+└── pom.xml
 ```
 
-### Option: Chạy Full Docker
+## Tài Liệu
 
-Nếu muốn chạy toàn bộ hệ thống bằng Docker (không cần cài Java/Maven):
+**Services**:
 
-```bash
-task build   # Build Docker images
-task start   # Run Infra + Apps
-```
-
-## 3. Kiểm Tra & Tài Liệu
-
-Sau khi chạy xong, truy cập:
-
-- **Catalog API**: [http://localhost:8081/swagger-ui.html](http://localhost:8081/swagger-ui.html)
-- **Order API**: [http://localhost:8082/swagger-ui.html](http://localhost:8082/swagger-ui.html)
-- **API Gateway (Tổng hợp)**: [http://localhost:8989/swagger-ui.html](http://localhost:8989/swagger-ui.html)
-- **RabbitMQ**: [http://localhost:15672](http://localhost:15672) (guest/guest)
-
-**Xem tài liệu chi tiết:**
-
-- [Cấu trúc & Architecture](docs/1.structure.md)
+- [Cấu Trúc & Architecture](docs/1.structure.md)
 - [Catalog Service](docs/2.catalog-service.md)
-- [Order Service](docs/3.order-service.md)
-- [Notification Service](docs/4.notification-service.md)
-- [API Gateway](docs/5.api-gateway.md)
-- [Docker Guide](docs/docker.md)
-- [CI/CD (GitHub Actions)](docs/github.md)
-- [Hướng dẫn sử dụng Task](docs/task.md)
+- [Inventory Service](docs/3.inventory-service.md)
+- [Order Service](docs/4.order-service.md)
+- [Notification Service](docs/5.notification-service.md)
+- [API Gateway](docs/6.api-gateway.md)
+
+**Operations**:
+
+- [Docker Guide](docs/7.docker.md)
+- [CI/CD (GitHub Actions)](docs/8.github-actions.md)
+- [Task Runner](docs/9.task.md)
+
+## Contributing
+
+Khi thêm service mới:
+
+1. Update `deployment/docker-compose/apps.yml`
+2. Thêm GitHub Actions workflow
+3. Update `Taskfile.yml`
+4. Viết docs trong `docs/`
+
+## Khởi Động Nhanh
+
+**Development**:
+
+```bash
+task start_infra
+# Sau đó chạy services bằng IDE
+```
+
+**Production-like**:
+
+```bash
+task build && task start
+```
+
+---
+
+Dự án mẫu cho mục đích học tập.

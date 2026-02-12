@@ -3,16 +3,15 @@ package com.qtuan02.inventory.domain;
 import com.qtuan02.inventory.domain.models.OrderStatus;
 import com.qtuan02.inventory.domain.models.Response;
 import com.qtuan02.inventory.domain.models.Result;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
@@ -21,9 +20,7 @@ public class InventoryService {
     private final InventoryHistoryRepository inventoryHistoryRepository;
     private static final Logger log = LoggerFactory.getLogger(InventoryService.class);
 
-    InventoryService(
-            InventoryRepository inventoryRepository,
-            InventoryHistoryRepository inventoryHistoryRepository) {
+    InventoryService(InventoryRepository inventoryRepository, InventoryHistoryRepository inventoryHistoryRepository) {
         this.inventoryRepository = inventoryRepository;
         this.inventoryHistoryRepository = inventoryHistoryRepository;
     }
@@ -48,8 +45,7 @@ public class InventoryService {
     }
 
     public Response<Void> deductStock(List<Inventory> items, String orderCode) {
-        if (items == null || items.isEmpty())
-            return Response.noContent("No items to deduct");
+        if (items == null || items.isEmpty()) return Response.noContent("No items to deduct");
         log.info("Starting stock deduction for order: {} ({} items)", orderCode, items.size());
 
         List<String> sortedProductCodes =
