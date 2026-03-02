@@ -1,4 +1,4 @@
-package com.qtuan02.order.domain;
+package com.qtuan02.order.domain.security;
 
 import org.springframework.stereotype.Service;
 

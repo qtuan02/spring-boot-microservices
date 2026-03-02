@@ -1,6 +1,8 @@
-package com.qtuan02.order.domain;
+package com.qtuan02.order.domain.order;
 
 import com.qtuan02.order.domain.models.*;
+import com.qtuan02.order.domain.order_event.OrderEventMapper;
+import com.qtuan02.order.domain.order_event.OrderEventService;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -27,8 +29,8 @@ public class OrderService {
     public Response<CreateOrderResponse> createOrder(String userName, CreateOrderRequest request) {
         orderValidator.validatePriceProduct(request);
         OrderEntity newOrder = OrderMapper.convertToEntity(request);
-        newOrder.setUserName(userName);
         orderValidator.validateDeductInventory(newOrder.getOrderNumber(), request);
+        newOrder.setUserName(userName);
         OrderEntity savedOrder = this.orderRepository.save(newOrder);
         log.info("Created Order with orderNumber={}", savedOrder.getOrderNumber());
         OrderCreatedEvent orderCreatedEvent = OrderEventMapper.buildOrderCreatedEvent(savedOrder);
@@ -47,7 +49,7 @@ public class OrderService {
     }
 
     public void processNewOrders() {
-        List<OrderEntity> orders = orderRepository.findByStatus(OrderStatus.NEW);
+        List<OrderEntity> orders = orderRepository.findByStatus(OrderStatusEvent.NEW);
         log.info("Found {} new orders to process", orders.size());
         for (OrderEntity order : orders) {
             this.process(order);
@@ -58,18 +60,18 @@ public class OrderService {
         try {
             if (canBeDelivered(order)) {
                 log.info("OrderNumber: {} can be delivered", order.getOrderNumber());
-                orderRepository.updateOrderStatus(order.getOrderNumber(), OrderStatus.DELIVERED);
+                orderRepository.updateOrderStatus(order.getOrderNumber(), OrderStatusEvent.DELIVERED);
                 orderEventService.save(OrderEventMapper.buildOrderDeliveredEvent(order));
 
             } else {
                 log.info("OrderNumber: {} can not be delivered", order.getOrderNumber());
-                orderRepository.updateOrderStatus(order.getOrderNumber(), OrderStatus.CANCELLED);
+                orderRepository.updateOrderStatus(order.getOrderNumber(), OrderStatusEvent.CANCELLED);
                 orderEventService.save(
                         OrderEventMapper.buildOrderCancelledEvent(order, "Can't deliver to the location"));
             }
         } catch (RuntimeException e) {
             log.error("Failed to process Order with orderNumber: {}", order.getOrderNumber(), e);
-            orderRepository.updateOrderStatus(order.getOrderNumber(), OrderStatus.ERROR);
+            orderRepository.updateOrderStatus(order.getOrderNumber(), OrderStatusEvent.ERROR);
             orderEventService.save(OrderEventMapper.buildOrderErrorEvent(order, e.getMessage()));
         }
     }

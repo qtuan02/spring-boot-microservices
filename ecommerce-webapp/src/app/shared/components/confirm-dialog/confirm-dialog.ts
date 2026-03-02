@@ -14,6 +14,7 @@ export type ConfirmDialogData = {
   message: string;
   confirmText?: string;
   cancelText?: string;
+  hideCancelButton?: boolean;
 };
 
 @Component({

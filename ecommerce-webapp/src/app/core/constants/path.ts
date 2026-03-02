@@ -10,3 +10,7 @@ export const PRODUCT_PATHS = {
   product: 'product',
   productDetail: 'product/:productCode',
 };
+
+export const CHECKOUT_PATHS = {
+  checkout: 'checkout',
+};

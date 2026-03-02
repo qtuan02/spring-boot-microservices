@@ -1,6 +1,6 @@
-package com.qtuan02.order.domain;
+package com.qtuan02.order.domain.order;
 
-import com.qtuan02.order.domain.models.OrderStatus;
+import com.qtuan02.order.domain.models.OrderStatusEvent;
 import com.qtuan02.order.domain.models.OrderSummary;
 import java.util.List;
 import java.util.Optional;
@@ -8,13 +8,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 interface OrderRepository extends JpaRepository<OrderEntity, Long> {
-    List<OrderEntity> findByStatus(OrderStatus status);
+    List<OrderEntity> findByStatus(OrderStatusEvent statusEvent);
 
     Optional<OrderEntity> findByOrderNumber(String orderNumber);
 
-    default void updateOrderStatus(String orderNumber, OrderStatus status) {
+    default void updateOrderStatus(String orderNumber, OrderStatusEvent statusEvent) {
         OrderEntity order = this.findByOrderNumber(orderNumber).orElseThrow();
-        order.setStatus(status);
+        order.setStatusEvent(statusEvent);
         this.save(order);
     }
 

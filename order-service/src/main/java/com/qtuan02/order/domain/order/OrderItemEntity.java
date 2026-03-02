@@ -1,4 +1,4 @@
-package com.qtuan02.order.domain;
+package com.qtuan02.order.domain.order;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "order_items")
-class OrderItemEntity {
+public class OrderItemEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_item_id_generator")

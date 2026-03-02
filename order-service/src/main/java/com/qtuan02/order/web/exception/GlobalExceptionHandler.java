@@ -1,7 +1,7 @@
 package com.qtuan02.order.web.exception;
 
-import com.qtuan02.order.domain.InvalidOrderException;
-import com.qtuan02.order.domain.OrderNotFoundException;
+import com.qtuan02.order.domain.order.InvalidOrderException;
+import com.qtuan02.order.domain.order.OrderNotFoundException;
 import java.net.URI;
 import java.time.Instant;
 import java.util.ArrayList;

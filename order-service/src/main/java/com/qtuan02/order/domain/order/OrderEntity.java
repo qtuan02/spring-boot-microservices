@@ -1,28 +1,17 @@
-package com.qtuan02.order.domain;
+package com.qtuan02.order.domain.order;
 
 import com.qtuan02.order.domain.models.Address;
 import com.qtuan02.order.domain.models.Customer;
 import com.qtuan02.order.domain.models.OrderStatus;
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.AttributeOverrides;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import com.qtuan02.order.domain.models.OrderStatusEvent;
+import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
 @Table(name = "orders")
-class OrderEntity {
+public class OrderEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_id_generator")
@@ -62,7 +51,16 @@ class OrderEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
+    @Enumerated(EnumType.STRING)
+    private OrderStatusEvent statusEvent;
+
     private String comments;
+
+    private BigDecimal totalAmount;
+
+    private BigDecimal taxAmount;
+
+    private BigDecimal finalAmount;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -126,12 +124,44 @@ class OrderEntity {
         this.status = status;
     }
 
+    public OrderStatusEvent getStatusEvent() {
+        return statusEvent;
+    }
+
+    public void setStatusEvent(OrderStatusEvent statusEvent) {
+        this.statusEvent = statusEvent;
+    }
+
     public String getComments() {
         return comments;
     }
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public BigDecimal getTaxAmount() {
+        return taxAmount;
+    }
+
+    public void setTaxAmount(BigDecimal taxAmount) {
+        this.taxAmount = taxAmount;
+    }
+
+    public BigDecimal getFinalAmount() {
+        return finalAmount;
+    }
+
+    public void setFinalAmount(BigDecimal finalAmount) {
+        this.finalAmount = finalAmount;
     }
 
     public LocalDateTime getCreatedAt() {

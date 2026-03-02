@@ -9,10 +9,11 @@ import { MatIcon } from '@angular/material/icon';
 import { QuantitySelector } from '~/shared/components/quantity-selector/quantity-selector';
 import { MatAnchor, MatIconButton } from '@angular/material/button';
 import { CartStore } from '~/core/stores/cart-store';
+import { BackButton } from '~/shared/components/back-button/back-button';
 
 @Component({
   selector: 'app-product',
-  imports: [LayoutContent, MatIcon, QuantitySelector, MatAnchor, MatIconButton],
+  imports: [LayoutContent, MatIcon, QuantitySelector, MatAnchor, MatIconButton, BackButton],
   templateUrl: './product-detail.html',
 })
 export class ProductDetail {

@@ -10,9 +10,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.qtuan02.order.domain.OrderService;
-import com.qtuan02.order.domain.SecurityService;
 import com.qtuan02.order.domain.models.CreateOrderRequest;
+import com.qtuan02.order.domain.order.OrderService;
+import com.qtuan02.order.domain.security.SecurityService;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;

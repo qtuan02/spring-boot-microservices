@@ -47,7 +47,10 @@ class OrderControllerTest extends AbstractIT {
                                      "price": 25.50,
                                      "quantity": 1
                                  }
-                             ]
+                             ],
+                             "totalAmount": 25.50,
+                             "taxAmount": 1.28,
+                             "finalAmount": 26.78
                         }
                     """;
             given().contentType(ContentType.JSON)

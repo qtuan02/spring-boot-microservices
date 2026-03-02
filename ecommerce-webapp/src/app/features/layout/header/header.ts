@@ -13,7 +13,7 @@ import { CartStore } from '~/core/stores/cart-store';
   templateUrl: './header.html',
 })
 export class Header {
-  readonly ROOT_PATHS = ROOT_PATHS;
-  readonly CART_PATHS = CART_PATHS;
-  readonly cartStore = inject(CartStore);
+  ROOT_PATHS = ROOT_PATHS;
+  CART_PATHS = CART_PATHS;
+  cartStore = inject(CartStore);
 }

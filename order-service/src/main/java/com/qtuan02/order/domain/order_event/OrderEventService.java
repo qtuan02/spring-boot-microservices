@@ -1,4 +1,4 @@
-package com.qtuan02.order.domain;
+package com.qtuan02.order.domain.order_event;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,7 +28,7 @@ public class OrderEventService {
         this.objectMapper = objectMapper;
     }
 
-    void save(OrderCreatedEvent event) {
+    public void save(OrderCreatedEvent event) {
         OrderEventEntity orderEvent = new OrderEventEntity();
         orderEvent.setEventId(event.eventId());
         orderEvent.setEventType(OrderEventType.ORDER_CREATED);
@@ -38,7 +38,7 @@ public class OrderEventService {
         this.orderEventRepository.save(orderEvent);
     }
 
-    void save(OrderDeliveredEvent event) {
+    public void save(OrderDeliveredEvent event) {
         OrderEventEntity orderEvent = new OrderEventEntity();
         orderEvent.setEventId(event.eventId());
         orderEvent.setEventType(OrderEventType.ORDER_DELIVERED);
@@ -48,7 +48,7 @@ public class OrderEventService {
         this.orderEventRepository.save(orderEvent);
     }
 
-    void save(OrderCancelledEvent event) {
+    public void save(OrderCancelledEvent event) {
         OrderEventEntity orderEvent = new OrderEventEntity();
         orderEvent.setEventId(event.eventId());
         orderEvent.setEventType(OrderEventType.ORDER_CANCELLED);
@@ -58,7 +58,7 @@ public class OrderEventService {
         this.orderEventRepository.save(orderEvent);
     }
 
-    void save(OrderErrorEvent event) {
+    public void save(OrderErrorEvent event) {
         OrderEventEntity orderEvent = new OrderEventEntity();
         orderEvent.setEventId(event.eventId());
         orderEvent.setEventType(OrderEventType.ORDER_PROCESSING_FAILED);

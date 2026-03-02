@@ -5,6 +5,7 @@ services:
     container_name: catalog-service
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - CATALOG_INVENTORY_SERVICE_URL=http://api-gateway:8989/inventory
       - DB_URL=jdbc:postgresql://catalog-db:5432/postgres
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
@@ -44,7 +45,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - ORDER_CATALOG_SERVICE_URL=http://api-gateway:8989/catalog
-      - INVENTORY_CATALOG_SERVICE_URL=http://api-gateway:8989/inventory
+      - ORDER_INVENTORY_SERVICE_URL=http://api-gateway:8989/inventory
       - DB_URL=jdbc:postgresql://order-db:5432/postgres
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres

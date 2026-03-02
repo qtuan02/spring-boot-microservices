@@ -1,9 +1,6 @@
-package com.qtuan02.order.domain;
+package com.qtuan02.order.domain.order;
 
-import com.qtuan02.order.domain.models.CreateOrderRequest;
-import com.qtuan02.order.domain.models.OrderDTO;
-import com.qtuan02.order.domain.models.OrderItem;
-import com.qtuan02.order.domain.models.OrderStatus;
+import com.qtuan02.order.domain.models.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -14,9 +11,14 @@ class OrderMapper {
     static OrderEntity convertToEntity(CreateOrderRequest request) {
         OrderEntity newOrder = new OrderEntity();
         newOrder.setOrderNumber(UUID.randomUUID().toString());
-        newOrder.setStatus(OrderStatus.NEW);
+        newOrder.setStatus(OrderStatus.PENDING);
+        newOrder.setStatusEvent(OrderStatusEvent.NEW);
         newOrder.setCustomer(request.customer());
         newOrder.setDeliveryAddress(request.deliveryAddress());
+        newOrder.setComments(request.comments());
+        newOrder.setTotalAmount(request.totalAmount());
+        newOrder.setTaxAmount(request.taxAmount());
+        newOrder.setFinalAmount(request.finalAmount());
         Set<OrderItemEntity> orderItems = new HashSet<>();
         for (OrderItem item : request.items()) {
             OrderItemEntity orderItem = new OrderItemEntity();
@@ -42,7 +44,7 @@ class OrderMapper {
                 orderItems,
                 order.getCustomer(),
                 order.getDeliveryAddress(),
-                order.getStatus(),
+                order.getStatusEvent(),
                 order.getComments(),
                 order.getCreatedAt());
     }

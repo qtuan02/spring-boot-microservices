@@ -16,7 +16,11 @@ create table orders
     delivery_address_zip_code text not null,
     delivery_address_country  text not null,
     status                    text not null,
+    status_event              text not null,
     comments                  text,
+    total_amount              numeric(19, 2) not null,
+    tax_amount                numeric(19, 2) not null,
+    final_amount              numeric(19, 2) not null,
     created_at                timestamp,
     updated_at                timestamp,
     primary key (id)

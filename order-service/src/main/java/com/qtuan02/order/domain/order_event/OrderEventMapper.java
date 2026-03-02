@@ -1,14 +1,15 @@
-package com.qtuan02.order.domain;
+package com.qtuan02.order.domain.order_event;
 
 import com.qtuan02.order.domain.models.*;
+import com.qtuan02.order.domain.order.OrderEntity;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-class OrderEventMapper {
+public class OrderEventMapper {
 
-    static OrderCreatedEvent buildOrderCreatedEvent(OrderEntity order) {
+    public static OrderCreatedEvent buildOrderCreatedEvent(OrderEntity order) {
         return new OrderCreatedEvent(
                 UUID.randomUUID().toString(),
                 order.getOrderNumber(),
@@ -18,7 +19,7 @@ class OrderEventMapper {
                 LocalDateTime.now());
     }
 
-    static OrderDeliveredEvent buildOrderDeliveredEvent(OrderEntity order) {
+    public static OrderDeliveredEvent buildOrderDeliveredEvent(OrderEntity order) {
         return new OrderDeliveredEvent(
                 UUID.randomUUID().toString(),
                 order.getOrderNumber(),
@@ -28,7 +29,7 @@ class OrderEventMapper {
                 LocalDateTime.now());
     }
 
-    static OrderCancelledEvent buildOrderCancelledEvent(OrderEntity order, String reason) {
+    public static OrderCancelledEvent buildOrderCancelledEvent(OrderEntity order, String reason) {
         return new OrderCancelledEvent(
                 UUID.randomUUID().toString(),
                 order.getOrderNumber(),
@@ -39,7 +40,7 @@ class OrderEventMapper {
                 LocalDateTime.now());
     }
 
-    static OrderErrorEvent buildOrderErrorEvent(OrderEntity order, String reason) {
+    public static OrderErrorEvent buildOrderErrorEvent(OrderEntity order, String reason) {
         return new OrderErrorEvent(
                 UUID.randomUUID().toString(),
                 order.getOrderNumber(),

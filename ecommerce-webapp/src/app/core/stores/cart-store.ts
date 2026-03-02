@@ -10,7 +10,7 @@ export type CartState = {
   items: CartItem[];
 };
 
-const CART_STORAGE_KEY = 'ecommerce-webapp-cart';
+export const CART_STORAGE_KEY = 'ecommerce-webapp-cart';
 
 export const CartStore = signalStore(
   { providedIn: 'root' },
@@ -64,6 +64,10 @@ export const CartStore = signalStore(
       patchState(store, {
         items: store.items().filter((item) => item.product.code !== productCode),
       });
+    },
+
+    clearCart: () => {
+      patchState(store, { items: [] });
     },
   })),
 );

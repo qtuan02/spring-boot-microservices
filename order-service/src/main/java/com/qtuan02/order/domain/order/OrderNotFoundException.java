@@ -1,4 +1,4 @@
-package com.qtuan02.order.domain;
+package com.qtuan02.order.domain.order;
 
 public class OrderNotFoundException extends RuntimeException {
     public OrderNotFoundException(String message) {

@@ -1,6 +1,6 @@
 package com.qtuan02.order.jobs;
 
-import com.qtuan02.order.domain.OrderService;
+import com.qtuan02.order.domain.order.OrderService;
 import java.time.Instant;
 import net.javacrumbs.shedlock.core.LockAssert;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;

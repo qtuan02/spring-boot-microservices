@@ -9,5 +9,5 @@ import { LayoutCard } from '~/shared/directives/layout-card';
   templateUrl: './list-cart.html',
 })
 export class ListCart {
-  readonly cartStore = inject(CartStore);
+  cartStore = inject(CartStore);
 }

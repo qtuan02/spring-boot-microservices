@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
-import { CART_PATHS, PRODUCT_PATHS, ROOT_PATHS } from './core/constants/path';
+import { CART_PATHS, CHECKOUT_PATHS, PRODUCT_PATHS, ROOT_PATHS } from './core/constants/path';
+import { checkoutGuard } from './core/guards/checkout.guard';
 
 export const routes: Routes = [
   //   {
@@ -19,5 +20,10 @@ export const routes: Routes = [
     path: PRODUCT_PATHS.productDetail,
     loadComponent: () =>
       import('./features/product/pages/product-detail').then((m) => m.ProductDetail),
+  },
+  {
+    path: CHECKOUT_PATHS.checkout,
+    canActivate: [checkoutGuard],
+    loadComponent: () => import('./features/checkout/pages/checkout').then((m) => m.Checkout),
   },
 ];

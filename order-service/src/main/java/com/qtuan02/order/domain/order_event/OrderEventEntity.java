@@ -1,4 +1,4 @@
-package com.qtuan02.order.domain;
+package com.qtuan02.order.domain.order_event;
 
 import com.qtuan02.order.domain.models.OrderEventType;
 import jakarta.persistence.Column;

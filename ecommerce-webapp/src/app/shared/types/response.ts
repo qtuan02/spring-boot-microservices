@@ -19,3 +19,11 @@ export type ResponseError = {
   timestamp: string;
   error: string;
 };
+
+export type ResponseSuccess<T> = {
+  statusCode: number
+  message: string
+  data: T
+  errorCode: number
+  errorMessage: string
+}
