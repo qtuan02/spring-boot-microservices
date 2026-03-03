@@ -33,6 +33,7 @@ public abstract class AbstractIT {
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
         registry.add("order.catalog-service-url", wiremockServer::getBaseUrl);
+        registry.add("order.inventory-service-url", wiremockServer::getBaseUrl);
     }
 
     @BeforeEach
@@ -54,5 +55,24 @@ public abstract class AbstractIT {
                     }
                 """
                                         .formatted(code, name, price.doubleValue()))));
+    }
+
+    protected static void mockDeductInventory() {
+        stubFor(
+                WireMock.post(urlMatching("/api/inventories/deduct"))
+                        .willReturn(
+                                aResponse()
+                                        .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                                        .withStatus(200)
+                                        .withBody(
+                                                """
+                    {
+                        "statusCode": 200,
+                        "message": "Stock deducted successfully",
+                        "data": null,
+                        "errorCode": null,
+                        "errorMessage": null
+                    }
+                """)));
     }
 }
