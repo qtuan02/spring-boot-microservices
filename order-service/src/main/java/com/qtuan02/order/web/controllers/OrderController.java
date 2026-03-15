@@ -4,7 +4,7 @@ import com.qtuan02.order.domain.models.*;
 import com.qtuan02.order.domain.order.OrderNotFoundException;
 import com.qtuan02.order.domain.order.OrderService;
 import com.qtuan02.order.domain.security.SecurityService;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+// import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.slf4j.Logger;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/orders")
-@SecurityRequirement(name = "security_auth")
+// @SecurityRequirement(name = "security_auth")
 class OrderController {
     private static final Logger log = LoggerFactory.getLogger(OrderController.class);
 

@@ -60,6 +60,11 @@ spring:
 springdoc:
   swagger-ui:
     use-root-path: true
+    oauth:
+      client-id: ecommerce-webapp
+      client-secret: vcXNpQ0gbCcn7hgPSlWDLq1HtCopLgMF
+      use-pkce-with-authorization-code-grant: true
+      scopes: openid
 #    urls:
 #      - name: catalog
 #        url: /v3/api-docs/catalog

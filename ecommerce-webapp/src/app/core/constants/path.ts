@@ -14,3 +14,7 @@ export const PRODUCT_PATHS = {
 export const CHECKOUT_PATHS = {
   checkout: 'checkout',
 };
+
+export const PROFILE_PATHS = {
+  profile: 'profile',
+};

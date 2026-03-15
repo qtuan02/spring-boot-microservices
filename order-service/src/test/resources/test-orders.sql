@@ -8,9 +8,9 @@ insert into orders (id, order_number, username,
                     delivery_address_state, delivery_address_zip_code, delivery_address_country,
                     status, status_event, comments,
                     total_amount, tax_amount, final_amount) values
-    (1, 'order-123', 'user', 'tuan', 'tuan@gmail.com', '11111111', '123 Main St', 'Apt 1', 'Dallas', 'TX', '75001', 'GERMANY', 'PENDING', 'NEW', null,
+    (1, 'order-123', 'tuanhq', 'tuan', 'tuan@gmail.com', '11111111', '123 Main St', 'Apt 1', 'Dallas', 'TX', '75001', 'GERMANY', 'PENDING', 'NEW', null,
      113.40, 5.67, 119.07),
-    (2, 'order-456', 'user', 'huynh', 'huynh@gmail.com', '2222222', '123 Main St', 'Apt 1', 'Hyderabad', 'TS', '500072', 'VIETNAM', 'PENDING', 'NEW', null,
+    (2, 'order-456', 'tuanhq', 'huynh', 'huynh@gmail.com', '2222222', '123 Main St', 'Apt 1', 'Hyderabad', 'TS', '500072', 'VIETNAM', 'PENDING', 'NEW', null,
      44.50, 2.23, 46.73)
 ;
 

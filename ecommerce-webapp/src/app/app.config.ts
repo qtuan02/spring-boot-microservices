@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter, withComponentInputBinding, withViewTransitions } from '@angular/router';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 
@@ -6,10 +6,30 @@ import { routes } from './app.routes';
 import { cachingInterceptor } from './core/interceptors/caching.interceptor';
 import { ENVIRONMENT } from './core/tokens/environment.token';
 import { provideHotToastConfig } from '@ngxpert/hot-toast';
+import { AuthService } from './core/services/auth/auth.service';
+
+function initializeKeycloak(authService: AuthService) {
+  return () => authService.init();
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    { provide: ENVIRONMENT, useValue: { apiBaseUrl: 'http://localhost:8989', domain: false } },
+    {
+      provide: ENVIRONMENT,
+      useValue: {
+        apiBaseUrl: 'http://localhost:8989',
+        domain: false,
+        keycloakUrl: 'http://localhost:9191',
+        keycloakRealm: 'ecommerce',
+        keycloakClientId: 'ecommerce-webapp',
+      },
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      deps: [AuthService],
+      multi: true,
+    },
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withComponentInputBinding(), withViewTransitions()),
     provideHttpClient(withFetch(), withInterceptors([cachingInterceptor])),

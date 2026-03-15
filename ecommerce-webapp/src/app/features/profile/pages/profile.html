@@ -1,0 +1,210 @@
+@if (authService.userProfile(); as profile) {
+  <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="max-w-[800px] mx-auto w-full mt-8 px-4 flex flex-col gap-6 mb-12">
+    
+    <!-- TOP ACTIONS -->
+    <div class="flex justify-between items-center mb-2">
+      <button type="button" matButton (click)="goBack()">
+        <mat-icon class="mr-1">arrow_back</mat-icon>
+        Back
+      </button>
+
+      @if (!isEditing()) {
+        <button type="button" matButton="filled" (click)="toggleEdit()">
+          <mat-icon class="mr-1">edit</mat-icon>
+          Update Profile
+        </button>
+      } @else {
+        <div class="flex gap-2">
+          <button type="button" matButton (click)="toggleEdit()">Cancel</button>
+          <button type="submit" matButton="filled" [disabled]="profileForm.invalid">
+            <mat-icon class="mr-1">save</mat-icon>
+            Save Changes
+          </button>
+        </div>
+      }
+    </div>
+
+    <!-- CARD 1: Customer Information -->
+    <mat-card class="elevated">
+      <mat-card-header class="!mb-4">
+        <div mat-card-avatar class="flex items-center justify-center bg-gray-200 rounded-full h-10 w-10 overflow-hidden">
+          <mat-icon class="text-gray-500">person_outline</mat-icon>
+        </div>
+        <mat-card-title class="!text-2xl font-semibold mt-1">Customer Information</mat-card-title>
+      </mat-card-header>
+
+      <mat-divider></mat-divider>
+
+      <mat-card-content class="!p-6">
+        @if (!isEditing()) {
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <span class="text-sm text-gray-500 font-medium block mb-1">Username</span>
+              <div class="pe-4 py-2 border-b border-gray-100 flex items-center gap-3">
+                <mat-icon class="text-primary-500 text-sm opacity-70">badge</mat-icon>
+                <span class="text-base font-medium">{{ profile.username }}</span>
+              </div>
+            </div>
+            
+            <div>
+              <span class="text-sm text-gray-500 font-medium block mb-1">Email Address</span>
+              <div class="pe-4 py-2 border-b border-gray-100 flex items-center gap-3">
+                <mat-icon class="text-primary-500 text-sm opacity-70">email</mat-icon>
+                <span class="text-base font-medium">{{ profile.email }}</span>
+              </div>
+            </div>
+
+            <div>
+              <span class="text-sm text-gray-500 font-medium block mb-1">Full Name</span>
+              <div class="pe-4 py-2 border-b border-gray-100 flex items-center gap-3">
+                <mat-icon class="text-primary-500 text-sm opacity-70">person</mat-icon>
+                <span class="text-base font-medium">{{ profile.firstName }} {{ profile.lastName }}</span>
+              </div>
+            </div>
+
+            <div>
+              <span class="text-sm text-gray-500 font-medium block mb-1">Phone Number</span>
+              <div class="pe-4 py-2 border-b border-gray-100 flex items-center gap-3">
+                <mat-icon class="text-primary-500 text-sm opacity-70">phone</mat-icon>
+                <span class="text-base font-medium">{{ profile.phone || 'Not provided' }}</span>
+              </div>
+            </div>
+          </div>
+        } @else {
+          <div formGroupName="customer" class="flex flex-col gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 opacity-70">
+              <mat-form-field appearance="outline">
+                <mat-label>Username (Read Only)</mat-label>
+                <input matInput [value]="profile.username" disabled />
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline">
+                <mat-label>Email (Read Only)</mat-label>
+                <input matInput [value]="profile.email" disabled />
+              </mat-form-field>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
+              <mat-form-field appearance="outline">
+                <mat-label>Full Name</mat-label>
+                <input matInput type="text" formControlName="fullname" placeholder="Enter your full name" />
+                <mat-icon matPrefix class="mr-2">person</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Phone Number</mat-label>
+                <input matInput type="tel" formControlName="phone" placeholder="Enter your phone number" />
+                <mat-icon matPrefix class="mr-2">phone</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <!-- CARD 2: Shipping Information -->
+    <mat-card class="elevated">
+      <mat-card-header class="!mb-4">
+        <div mat-card-avatar class="flex items-center justify-center bg-gray-200 rounded-full h-10 w-10 overflow-hidden">
+          <mat-icon class="text-gray-500">local_shipping</mat-icon>
+        </div>
+        <mat-card-title class="!text-2xl font-semibold mt-1">Shipping Information</mat-card-title>
+      </mat-card-header>
+
+      <mat-divider></mat-divider>
+
+      <mat-card-content class="!p-6">
+        @if (!isEditing()) {
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            @if (profile.shippingAddress1 || profile.shippingCity) {
+              <div class="md:col-span-2">
+                <span class="text-sm text-gray-500 font-medium block mb-1">Address</span>
+                <div class="pe-4 py-2 border-b border-gray-100 flex items-center gap-3">
+                  <mat-icon class="text-primary-500 text-sm opacity-70">home</mat-icon>
+                  <span class="text-base font-medium">
+                    {{ profile.shippingAddress1 }} 
+                    {{ profile.shippingAddress2 ? ', ' + profile.shippingAddress2 : '' }}
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <span class="text-sm text-gray-500 font-medium block mb-1">City</span>
+                <div class="pe-4 py-2 border-b border-gray-100 flex items-center gap-3">
+                  <mat-icon class="text-primary-500 text-sm opacity-70">location_city</mat-icon>
+                  <span class="text-base font-medium">{{ profile.shippingCity || 'N/A' }}</span>
+                </div>
+              </div>
+
+              <div>
+                <span class="text-sm text-gray-500 font-medium block mb-1">State & Zip Code</span>
+                <div class="pe-4 py-2 border-b border-gray-100 flex items-center gap-3">
+                  <mat-icon class="text-primary-500 text-sm opacity-70">map</mat-icon>
+                  <span class="text-base font-medium">
+                    {{ profile.shippingState || 'N/A' }} {{ profile.shippingZipCode ? '- ' + profile.shippingZipCode : '' }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="md:col-span-2">
+                <span class="text-sm text-gray-500 font-medium block mb-1">Country</span>
+                <div class="pe-4 py-2 border-b border-gray-100 flex items-center gap-3">
+                  <mat-icon class="text-primary-500 text-sm opacity-70">public</mat-icon>
+                  <span class="text-base font-medium">{{ profile.shippingCountry || 'N/A' }}</span>
+                </div>
+              </div>
+            } @else {
+              <div class="md:col-span-2 flex flex-col items-center justify-center py-6 text-gray-500 border border-dashed border-gray-300 rounded-lg bg-gray-50">
+                <mat-icon class="!text-3xl mb-2 opacity-50">local_shipping</mat-icon>
+                <span class="text-base font-medium">No shipping address provided yet.</span>
+                <span class="text-sm mt-1">Click the update profile button above to provide an address.</span>
+              </div>
+            }
+          </div>
+        } @else {
+          <div formGroupName="shipping" class="grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-1">
+            <mat-form-field appearance="outline" class="col-span-1 lg:col-span-2">
+              <mat-label>Address 1</mat-label>
+              <input matInput type="text" formControlName="address1" />
+            </mat-form-field>
+        
+            <mat-form-field appearance="outline" class="col-span-1 lg:col-span-2">
+              <mat-label>Address 2</mat-label>
+              <input matInput type="text" formControlName="address2" />
+            </mat-form-field>
+        
+            <mat-form-field appearance="outline">
+              <mat-label>City</mat-label>
+              <input matInput type="text" formControlName="city" />
+            </mat-form-field>
+        
+            <mat-form-field appearance="outline">
+              <mat-label>State</mat-label>
+              <input matInput type="text" formControlName="state" />
+            </mat-form-field>
+        
+            <mat-form-field appearance="outline">
+              <mat-label>Country</mat-label>
+              <input matInput type="text" formControlName="country" />
+            </mat-form-field>
+        
+            <mat-form-field appearance="outline">
+              <mat-label>Zip Code</mat-label>
+              <input matInput type="text" formControlName="zipCode" />
+            </mat-form-field>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+
+  </form>
+} @else {
+  <div class="flex flex-col items-center justify-center py-12 text-gray-500">
+    <mat-icon class="!text-5xl mb-4 opacity-50">account_circle</mat-icon>
+    <p class="text-lg">No profile information available.</p>
+    <p class="text-sm mt-2">Please log in to view your profile.</p>
+    <button type="button" matButton="filled" class="mt-4" (click)="authService.login()">
+      Sign In Now
+    </button>
+  </div>
+}

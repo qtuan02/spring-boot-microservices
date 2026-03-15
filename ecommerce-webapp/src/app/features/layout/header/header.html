@@ -13,8 +13,20 @@
       >
         <mat-icon>shopping_cart</mat-icon>
       </button>
-      <button matButton>Sign In</button>
-      <button matButton="filled">Sign Up</button>
+
+      @if (authService.isLoggedIn()) {
+        <div class="flex items-center gap-0">
+          <button matButton class="!font-medium" [routerLink]="PROFILE_PATHS.profile">
+            Hi, {{ authService.username() }}
+          </button>
+          <button matIconButton class="!text-red-500" (click)="logout()">
+            <mat-icon>logout</mat-icon>
+          </button>
+        </div>
+      } @else {
+        <button matButton (click)="authService.login()">Sign In</button>
+        <button matButton="filled" (click)="authService.login()">Sign Up</button>
+      }
     </div>
   </div>
 </mat-toolbar>
